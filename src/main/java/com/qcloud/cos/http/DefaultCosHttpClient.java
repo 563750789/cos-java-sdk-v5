@@ -145,8 +145,11 @@ public class DefaultCosHttpClient implements CosHttpClient {
         String paramStr = paramBuffer.toString();
         if (!paramStr.isEmpty()) {
             urlBuffer.append("?").append(paramStr);
+            //万象接口特殊逻辑 要求某些特定的参数置于末尾
+            if (request.getCiSpecialEndParameter() != null) {
+                urlBuffer.append("&").append(request.getCiSpecialEndParameter());
+            }
         }
-
 
         try {
             URI uri = new URI(urlBuffer.toString());

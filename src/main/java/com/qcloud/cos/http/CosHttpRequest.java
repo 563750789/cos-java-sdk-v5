@@ -32,6 +32,8 @@ public class CosHttpRequest<T extends CosServiceRequest> {
     
     private ProgressListener progressListener;
 
+    private String ciSpecialEndParameter;
+
     public CosHttpRequest(T originRequest) {
         this.originRequest = originRequest;
     }
@@ -117,6 +119,14 @@ public class CosHttpRequest<T extends CosServiceRequest> {
 
     public void setProgressListener(ProgressListener progressListener) {
         this.progressListener = progressListener;
+    }
+
+    public String getCiSpecialEndParameter() {
+        return ciSpecialEndParameter;
+    }
+
+    public void setCiSpecialEndParameter(String ciSpecialEndParameter) {
+        this.ciSpecialEndParameter = ciSpecialEndParameter;
     }
 
     @Override
