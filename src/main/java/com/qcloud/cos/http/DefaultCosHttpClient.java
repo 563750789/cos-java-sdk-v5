@@ -149,6 +149,10 @@ public class DefaultCosHttpClient implements CosHttpClient {
             if (request.getCiSpecialEndParameter() != null) {
                 urlBuffer.append("&").append(request.getCiSpecialEndParameter());
             }
+        } else {
+            if (request.getCiSpecialEndParameter() != null) {
+                urlBuffer.append("?").append(request.getCiSpecialEndParameter());
+            }
         }
 
         try {
