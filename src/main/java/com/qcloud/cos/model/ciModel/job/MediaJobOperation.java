@@ -83,75 +83,72 @@ public class MediaJobOperation {
     private MediaConcatTemplateObject mediaConcatTemplate;
 
     @XStreamAlias("MediaSnapshot")
-    private MediaSnapshotObject snapshot;
+    private MediaSnapshotObject snapshot = new MediaSnapshotObject();
 
     @XStreamAlias("MediaSegment")
-    private MediaSegmentObject segment;
+    private MediaSegmentObject segment = new MediaSegmentObject();
 
     @XStreamAlias("MediaSmartCover")
-    private MediaSmartCoverObject smartCover;
+    private MediaSmartCoverObject smartCover = new MediaSmartCoverObject();
 
     @XStreamAlias("MediaVideoMontage")
-    private MediaVideoMontageObject videoMontage;
+    private MediaVideoMontageObject videoMontage = new MediaVideoMontageObject();
 
     @XStreamAlias("DigitalWatermark")
-    private MediaDigitalWatermark digitalWatermark;
+    private MediaDigitalWatermark digitalWatermark = new MediaDigitalWatermark();
 
     @XStreamAlias("ExtractDigitalWatermark")
-    private ExtractDigitalWatermark extractDigitalWatermark;
+    private ExtractDigitalWatermark extractDigitalWatermark = new ExtractDigitalWatermark();
 
     @XStreamAlias("MediaPicProcessTemplate")
-    private MediaPicProcessTemplateObject picProcess;
+    private MediaPicProcessTemplateObject picProcess = new MediaPicProcessTemplateObject();
 
     @XStreamAlias("MediaResult")
-    private MediaResult mediaResult;
+    private MediaResult mediaResult = new MediaResult();
 
     @XStreamAlias("PicProcessResult")
-    private PicProcessResult picProcessResult;
+    private PicProcessResult picProcessResult = new PicProcessResult();
 
     @XStreamAlias("VideoTargetRec")
-    private VideoTargetRec videoTargetRec;
+    private VideoTargetRec videoTargetRec = new VideoTargetRec();
 
     @XStreamAlias("VoiceSeparate")
-    private VoiceSeparate voiceSeparate;
+    private VoiceSeparate voiceSeparate = new VoiceSeparate();
 
     @XStreamAlias("MediaTimeInterval")
-    private MediaTimeIntervalObject timeInterval;
+    private MediaTimeIntervalObject timeInterval = new MediaTimeIntervalObject();
 
     @XStreamAlias("MediaTtsConfig")
-    private MediaTtsConfig ttsConfig;
+    private MediaTtsConfig ttsConfig = new MediaTtsConfig();
 
     @XStreamAlias("VideoEnhance")
-    private VideoEnhance videoEnhance;
+    private VideoEnhance videoEnhance = new VideoEnhance();
 
     @XStreamAlias("TtsTpl")
-    private TtsTpl ttsTpl;
+    private TtsTpl ttsTpl = new TtsTpl();
 
     @XStreamAlias("Subtitles")
-    private Subtitles subtitles;
+    private Subtitles subtitles = new Subtitles();
 
     @XStreamAlias("VideoTag")
-    private VideoTag videoTag;
+    private VideoTag videoTag = new VideoTag();
 
     @XStreamAlias("VideoTagResult")
-    private VideoTagResult videoTagResult;
+    private VideoTagResult videoTagResult = new VideoTagResult();
 
     @XStreamAlias("QualityEstimateConfig")
-    private QualityEstimateConfig qualityEstimateConfig;
+    private QualityEstimateConfig qualityEstimateConfig = new QualityEstimateConfig();
 
     @XStreamAlias("QualityEstimate")
-    private QualityEstimate qualityEstimate;
+    private QualityEstimate qualityEstimate = new QualityEstimate();
 
     @XStreamAlias("VocalScore")
-    private VocalScore vocalScore;
+    private VocalScore vocalScore = new VocalScore();
 
     @XStreamAlias("VocalScoreResult")
-    private VocalScoreResult vocalScoreResult;
+    private VocalScoreResult vocalScoreResult = new VocalScoreResult();
 
     public VocalScoreResult getVocalScoreResult() {
-        if (vocalScoreResult == null) {
-            vocalScoreResult = new VocalScoreResult();
-        }
         return vocalScoreResult;
     }
 
@@ -160,9 +157,6 @@ public class MediaJobOperation {
     }
 
     public VocalScore getVocalScore() {
-        if (vocalScore == null) {
-            vocalScore = new VocalScore();
-        }
         return vocalScore;
     }
 
@@ -171,9 +165,6 @@ public class MediaJobOperation {
     }
 
     public MediaTimeIntervalObject getTimeInterval() {
-        if (timeInterval == null) {
-            timeInterval = new MediaTimeIntervalObject();
-        }
         return timeInterval;
     }
 
@@ -279,9 +270,6 @@ public class MediaJobOperation {
     }
 
     public MediaDigitalWatermark getDigitalWatermark() {
-        if (digitalWatermark == null) {
-            digitalWatermark = new MediaDigitalWatermark();
-        }
         return digitalWatermark;
     }
 
@@ -290,9 +278,6 @@ public class MediaJobOperation {
     }
 
     public ExtractDigitalWatermark getExtractDigitalWatermark() {
-        if (extractDigitalWatermark == null) {
-            extractDigitalWatermark = new ExtractDigitalWatermark();
-        }
         return extractDigitalWatermark;
     }
 
@@ -301,9 +286,6 @@ public class MediaJobOperation {
     }
 
     public MediaSnapshotObject getSnapshot() {
-        if (snapshot == null) {
-            snapshot = new MediaSnapshotObject();
-        }
         return snapshot;
     }
 
@@ -312,9 +294,6 @@ public class MediaJobOperation {
     }
 
     public MediaSegmentObject getSegment() {
-        if (segment == null) {
-            segment = new MediaSegmentObject();
-        }
         return segment;
     }
 
@@ -334,9 +313,6 @@ public class MediaJobOperation {
     }
 
     public MediaSmartCoverObject getSmartCover() {
-        if (smartCover == null) {
-            smartCover = new MediaSmartCoverObject();
-        }
         return smartCover;
     }
 
@@ -345,9 +321,6 @@ public class MediaJobOperation {
     }
 
     public MediaVideoMontageObject getVideoMontage() {
-        if (videoMontage == null) {
-            videoMontage = new MediaVideoMontageObject();
-        }
         return videoMontage;
     }
 
@@ -391,9 +364,6 @@ public class MediaJobOperation {
     }
 
     public MediaResult getMediaResult() {
-        if (mediaResult == null) {
-            mediaResult = new MediaResult();
-        }
         return mediaResult;
     }
 
@@ -402,9 +372,6 @@ public class MediaJobOperation {
     }
 
     public PicProcessResult getPicProcessResult() {
-        if (picProcessResult == null) {
-            picProcessResult = new PicProcessResult();
-        }
         return picProcessResult;
     }
 
@@ -432,9 +399,6 @@ public class MediaJobOperation {
     }
 
     public VoiceSeparate getVoiceSeparate() {
-        if (voiceSeparate == null) {
-            voiceSeparate = new VoiceSeparate();
-        }
         return voiceSeparate;
     }
 
@@ -443,9 +407,6 @@ public class MediaJobOperation {
     }
 
     public MediaTtsConfig getTtsConfig() {
-        if (ttsConfig == null) {
-            ttsConfig = new MediaTtsConfig();
-        }
         return ttsConfig;
     }
 
@@ -454,9 +415,6 @@ public class MediaJobOperation {
     }
 
     public TtsTpl getTtsTpl() {
-        if (ttsTpl == null) {
-            ttsTpl = new TtsTpl();
-        }
         return ttsTpl;
     }
 
@@ -465,9 +423,6 @@ public class MediaJobOperation {
     }
 
     public VideoEnhance getVideoEnhance() {
-        if (videoEnhance == null) {
-            videoEnhance = new VideoEnhance();
-        }
         return videoEnhance;
     }
 
@@ -476,9 +431,6 @@ public class MediaJobOperation {
     }
 
     public Subtitles getSubtitles() {
-        if (subtitles == null) {
-            subtitles = new Subtitles();
-        }
         return subtitles;
     }
 
@@ -487,9 +439,6 @@ public class MediaJobOperation {
     }
 
     public VideoTag getVideoTag() {
-        if (videoTag == null) {
-            videoTag = new VideoTag();
-        }
         return videoTag;
     }
 
@@ -549,9 +498,6 @@ public class MediaJobOperation {
     }
 
     public QualityEstimateConfig getQualityEstimateConfig() {
-        if (qualityEstimateConfig == null) {
-            qualityEstimateConfig = new QualityEstimateConfig();
-        }
         return qualityEstimateConfig;
     }
 
