@@ -36,6 +36,7 @@ import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.exception.CosServiceException;
 import com.qcloud.cos.exception.MultiObjectDeleteException.DeleteError;
 import com.qcloud.cos.internal.cihandler.AIGameRecResponseHandler;
+import com.qcloud.cos.internal.cihandler.AIObjectDetectHandler;
 import com.qcloud.cos.internal.cihandler.AutoTranslationBlockResponseHandler;
 import com.qcloud.cos.internal.cihandler.BatchJobResponseHandler;
 import com.qcloud.cos.internal.cihandler.CIXmlResponsesSaxParser;
@@ -871,6 +872,12 @@ public class XmlResponsesSaxParser {
 
     public DetectCarHandler parseDetectCarResponse(InputStream inputStream) throws IOException {
         DetectCarHandler handler = new DetectCarHandler();
+        parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
+        return handler;
+    }
+
+    public AIObjectDetectHandler parseAIObjectDetectResponse(InputStream inputStream) throws IOException {
+        AIObjectDetectHandler handler = new AIObjectDetectHandler();
         parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
         return handler;
     }

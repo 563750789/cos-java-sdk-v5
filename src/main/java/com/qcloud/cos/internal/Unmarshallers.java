@@ -56,6 +56,7 @@ import com.qcloud.cos.model.ciModel.job.FileProcessJobResponse;
 import com.qcloud.cos.model.ciModel.job.MediaJobResponse;
 import com.qcloud.cos.model.ciModel.job.MediaListJobResponse;
 import com.qcloud.cos.model.ciModel.mediaInfo.MediaInfoResponse;
+import com.qcloud.cos.model.ciModel.ai.CreateAIObjectDetectJobResponse;
 import com.qcloud.cos.model.ciModel.persistence.AIGameRecResponse;
 import com.qcloud.cos.model.ciModel.persistence.CIUploadResult;
 import com.qcloud.cos.model.ciModel.persistence.DetectCarResponse;
@@ -837,6 +838,15 @@ public class Unmarshallers {
         public DetectCarResponse unmarshall(InputStream in) throws Exception {
             return new XmlResponsesSaxParser()
                     .parseDetectCarResponse(in).getResponse();
+        }
+    }
+
+    public static final class AIObjectDetectUnmarshaller
+            implements Unmarshaller<CreateAIObjectDetectJobResponse, InputStream> {
+
+        public CreateAIObjectDetectJobResponse unmarshall(InputStream in) throws Exception {
+            return new XmlResponsesSaxParser()
+                    .parseAIObjectDetectResponse(in).getResponse();
         }
     }
 

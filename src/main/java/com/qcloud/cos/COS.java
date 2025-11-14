@@ -3137,6 +3137,10 @@ public interface COS extends COSDirectSpi {
 
     DetectCarResponse detectCar(AIRecRequest request);
 
+    CreateAIObjectDetectJobResponse createAIObjectDetectJob(CreateAIObjectDetectJobRequest request);
+
+    AIPortraitMattingResponse aiPortraitMatting(AIPortraitMattingRequest request);
+
     boolean openImageSearch(OpenImageSearchRequest imageSearchRequest);
 
     boolean addGalleryImages(ImageSearchRequest request);

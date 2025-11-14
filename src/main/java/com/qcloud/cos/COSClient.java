@@ -4750,6 +4750,43 @@ public class COSClient implements COS {
     }
 
     @Override
+    public CreateAIObjectDetectJobResponse createAIObjectDetectJob(CreateAIObjectDetectJobRequest aiObjectDetectRequest) {
+        rejectNull(aiObjectDetectRequest.getBucketName(),
+                "The bucketName parameter must be specified for AI object detect");
+        CosHttpRequest<CreateAIObjectDetectJobRequest> request = createRequest(
+                aiObjectDetectRequest.getBucketName(), 
+                aiObjectDetectRequest.getObjectKey(), 
+                aiObjectDetectRequest, 
+                HttpMethodName.GET);
+        request.addParameter("ci-process", "AIObjectDetect");
+        addParameterIfNotNull(request, "detect-url", aiObjectDetectRequest.getDetectUrl());
+        return invoke(request, new Unmarshallers.AIObjectDetectUnmarshaller());
+    }
+
+    @Override
+    public AIPortraitMattingResponse aiPortraitMatting(AIPortraitMattingRequest aiPortraitMattingRequest) {
+        rejectNull(aiPortraitMattingRequest.getBucketName(),
+                "The bucketName parameter must be specified for AI portrait matting");
+        CosHttpRequest<AIPortraitMattingRequest> request = createRequest(
+                aiPortraitMattingRequest.getBucketName(),
+                aiPortraitMattingRequest.getObjectKey(),
+                aiPortraitMattingRequest,
+                HttpMethodName.GET);
+        request.addParameter("ci-process", "AIPortraitMatting");
+        addParameterIfNotNull(request, "detect-url", aiPortraitMattingRequest.getDetectUrl());
+        addParameterIfNotNull(request, "center-layout", 
+                aiPortraitMattingRequest.getCenterLayout() != null ? 
+                        String.valueOf(aiPortraitMattingRequest.getCenterLayout()) : null);
+        addParameterIfNotNull(request, "padding-layout", aiPortraitMattingRequest.getPaddingLayout());
+        
+        COSObject cosObject = invoke(request, new COSObjectResponseHandler());
+        AIPortraitMattingResponse response = new AIPortraitMattingResponse();
+        response.setImageStream(cosObject.getObjectContent());
+        response.setMetadata(cosObject.getObjectMetadata());
+        return response;
+    }
+
+    @Override
     public boolean openImageSearch(OpenImageSearchRequest imageSearchRequest) {
         rejectNull(imageSearchRequest,
                 "The request parameter must be specified setting the object tags");
