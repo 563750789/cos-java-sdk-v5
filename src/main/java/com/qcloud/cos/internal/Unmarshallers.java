@@ -49,6 +49,7 @@ import com.qcloud.cos.model.ciModel.image.ImageLabelV2Response;
 import com.qcloud.cos.model.ciModel.image.ImageSearchResponse;
 import com.qcloud.cos.model.ciModel.image.ImageStyleResponse;
 import com.qcloud.cos.model.ciModel.job.AIGCMetadataResponse;
+import com.qcloud.cos.model.ciModel.job.BatchJobListResponse;
 import com.qcloud.cos.model.ciModel.job.BatchJobResponse;
 import com.qcloud.cos.model.ciModel.job.DocJobListResponse;
 import com.qcloud.cos.model.ciModel.job.DocJobResponse;
@@ -625,6 +626,15 @@ public class Unmarshallers {
         public BatchJobResponse unmarshall(InputStream in) throws Exception {
             return new XmlResponsesSaxParser()
                     .parseBatchJobResponse(in).getResponse();
+        }
+    }
+
+    public static final class BatchJobListUnmarshaller
+            implements Unmarshaller<BatchJobListResponse, InputStream> {
+
+        public BatchJobListResponse unmarshall(InputStream in) throws Exception {
+            return new XmlResponsesSaxParser()
+                    .parseBatchJobListResponse(in).getResponse();
         }
     }
 

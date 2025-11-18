@@ -5081,6 +5081,31 @@ public class COSClient implements COS {
     }
 
     @Override
+    public BatchJobListResponse describeInventoryTriggerJobs(BatchJobRequest request) {
+        this.checkCIRequestCommon(request);
+        CosHttpRequest<BatchJobRequest> httpRequest = this.createRequest(request.getBucketName(), "/inventorytriggerjob", request, HttpMethodName.GET);
+        addParameterIfNotNull(httpRequest, "orderByTime", request.getOrderByTime());
+        addParameterIfNotNull(httpRequest, "nextToken", request.getNextToken());
+        addParameterIfNotNull(httpRequest, "size", request.getSize() != null ? request.getSize().toString() : null);
+        addParameterIfNotNull(httpRequest, "states", request.getStates());
+        addParameterIfNotNull(httpRequest, "startCreationTime", request.getStartCreationTime());
+        addParameterIfNotNull(httpRequest, "endCreationTime", request.getEndCreationTime());
+        addParameterIfNotNull(httpRequest, "workflowId", request.getWorkflowId());
+        addParameterIfNotNull(httpRequest, "jobId", request.getJobId());
+        addParameterIfNotNull(httpRequest, "name", request.getName());
+        return this.invoke(httpRequest, new Unmarshallers.BatchJobListUnmarshaller());
+    }
+
+    @Override
+    public Boolean cancelInventoryTriggerJob(BatchJobRequest request) {
+        this.checkCIRequestCommon(request);
+        CosHttpRequest<BatchJobRequest> httpRequest = this.createRequest(request.getBucketName(), "/inventorytriggerjob/" + request.getJobId(), request, HttpMethodName.PUT);
+        httpRequest.addParameter("cancel", null);
+        invoke(httpRequest, voidCosResponseHandler);
+        return true;
+    }
+
+    @Override
     public AutoTranslationBlockResponse autoTranslationBlock(AutoTranslationBlockRequest translationBlockRequest) {
         rejectNull(translationBlockRequest,
                 "The request parameter must be specified setting the object tags");

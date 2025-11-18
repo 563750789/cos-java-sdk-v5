@@ -38,6 +38,7 @@ import com.qcloud.cos.exception.MultiObjectDeleteException.DeleteError;
 import com.qcloud.cos.internal.cihandler.AIGameRecResponseHandler;
 import com.qcloud.cos.internal.cihandler.AIObjectDetectHandler;
 import com.qcloud.cos.internal.cihandler.AutoTranslationBlockResponseHandler;
+import com.qcloud.cos.internal.cihandler.BatchJobListResponseHandler;
 import com.qcloud.cos.internal.cihandler.BatchJobResponseHandler;
 import com.qcloud.cos.internal.cihandler.CIXmlResponsesSaxParser;
 import com.qcloud.cos.internal.cihandler.DetectCarHandler;
@@ -752,6 +753,12 @@ public class XmlResponsesSaxParser {
 
     public BatchJobResponseHandler parseBatchJobResponse(InputStream inputStream) throws IOException {
         BatchJobResponseHandler handler = new BatchJobResponseHandler();
+        parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
+        return handler;
+    }
+
+    public BatchJobListResponseHandler parseBatchJobListResponse(InputStream inputStream) throws IOException {
+        BatchJobListResponseHandler handler = new BatchJobListResponseHandler();
         parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
         return handler;
     }
