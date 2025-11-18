@@ -42,6 +42,7 @@ import com.qcloud.cos.internal.cihandler.BatchJobResponseHandler;
 import com.qcloud.cos.internal.cihandler.CIXmlResponsesSaxParser;
 import com.qcloud.cos.internal.cihandler.DetectCarHandler;
 import com.qcloud.cos.internal.cihandler.DetectFaceResponseHandler;
+import com.qcloud.cos.internal.cihandler.FileHashCodeSyncResponseHandler;
 import com.qcloud.cos.internal.cihandler.FileProcessResponseHandler;
 import com.qcloud.cos.internal.cihandler.GenerateQrcodeHandler;
 import com.qcloud.cos.internal.cihandler.GetImageStyleHandler;
@@ -7255,6 +7256,15 @@ public class XmlResponsesSaxParser {
                 }
             }
         }
+    }
+
+    /**
+     * 解析文件哈希值同步计算响应
+     */
+    public FileHashCodeSyncResponseHandler parseFileHashCodeSyncResponse(InputStream inputStream) throws IOException {
+        FileHashCodeSyncResponseHandler handler = new FileHashCodeSyncResponseHandler();
+        parseXmlInputStream(handler, inputStream);
+        return handler;
     }
 }
 

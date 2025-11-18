@@ -52,6 +52,7 @@ import com.qcloud.cos.model.ciModel.job.AIGCMetadataResponse;
 import com.qcloud.cos.model.ciModel.job.BatchJobResponse;
 import com.qcloud.cos.model.ciModel.job.DocJobListResponse;
 import com.qcloud.cos.model.ciModel.job.DocJobResponse;
+import com.qcloud.cos.model.ciModel.job.FileHashCodeSyncResponse;
 import com.qcloud.cos.model.ciModel.job.FileProcessJobResponse;
 import com.qcloud.cos.model.ciModel.job.MediaJobResponse;
 import com.qcloud.cos.model.ciModel.job.MediaListJobResponse;
@@ -1008,6 +1009,15 @@ public class Unmarshallers {
     public static final class AigcMetadataUnmarshaller implements Unmarshaller<AIGCMetadataResponse, InputStream> {
         public AIGCMetadataResponse unmarshall(InputStream in) throws IOException {
             return new AigcMetadataJsonResponseHandler().getResponse(in);
+        }
+    }
+
+    public static final class FileHashCodeSyncResponseUnmarshaller
+            implements Unmarshaller<FileHashCodeSyncResponse, InputStream> {
+
+        public FileHashCodeSyncResponse unmarshall(InputStream in) throws Exception {
+            return new XmlResponsesSaxParser()
+                    .parseFileHashCodeSyncResponse(in).getResponse();
         }
     }
 }

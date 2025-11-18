@@ -5920,5 +5920,27 @@ public class COSClient implements COS {
         return invoke(httpRequest, new Unmarshallers.CICommonUnmarshaller<DocAIGCMetadataJobResponse>(DocAIGCMetadataJobResponse.class));
     }
 
+    /**
+     * 同步计算文件哈希值
+     * 详情见 https://cloud.tencent.com/document/product/460/83084
+     */
+    public FileHashCodeSyncResponse fileHashCodeSync(FileHashCodeSyncRequest fileHashCodeSyncRequest) {
+        rejectNull(fileHashCodeSyncRequest.getBucketName(),
+                "The bucketName parameter must be specified for file hash code sync calculation");
+        rejectNull(fileHashCodeSyncRequest.getObjectKey(),
+                "The objectKey parameter must be specified for file hash code sync calculation");
+        
+        CosHttpRequest<FileHashCodeSyncRequest> request = createRequest(
+                fileHashCodeSyncRequest.getBucketName(),
+                fileHashCodeSyncRequest.getObjectKey(),
+                fileHashCodeSyncRequest,
+                HttpMethodName.GET);
+        request.addParameter("ci-process", "filehash");
+        addParameterIfNotNull(request, "type", fileHashCodeSyncRequest.getType());
+        addParameterIfNotNull(request, "addtoheader", fileHashCodeSyncRequest.getAddToHeader());
+        
+        return invoke(request, new COSXmlResponseHandler<>(new Unmarshallers.FileHashCodeSyncResponseUnmarshaller()));
+    }
+
 }
 
