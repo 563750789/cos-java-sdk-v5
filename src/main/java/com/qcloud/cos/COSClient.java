@@ -4605,6 +4605,8 @@ public class COSClient implements COS {
         putIfNotNull(params, "quality", originalRequest.getQuality());
         putIfNotNull(params, "scale", originalRequest.getScale());
         putIfNotNull(params, "imageDpi", originalRequest.getImageDpi());
+        putIfNotNull(params, "type", originalRequest.getType());
+        putIfNotNull(params, "text", originalRequest.getText());
         URL url = generatePresignedUrl(request.getBucketName(), request.getResourcePath(), expiredTime, HttpMethodName.GET, new HashMap<String, String>(), params, false, false);
         return url.toString();
     }
