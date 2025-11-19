@@ -728,6 +728,7 @@ public class RequestXmlFactory {
         addIfNotNull(xml, "Image", docWatermark.getImage());
         addIfNotNull(xml, "Dx", docWatermark.getDx());
         addIfNotNull(xml, "Dy", docWatermark.getDy());
+        addIfNotNull(xml, "SrcType", docWatermark.getSrcType());
         xml.end();
     }
 

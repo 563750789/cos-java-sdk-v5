@@ -5416,6 +5416,9 @@ public class XmlResponsesSaxParser {
                     case "Type":
                         docWatermarkObject.setType(getText());
                         break;
+                    case "SrcType":
+                        docWatermarkObject.setSrcType(getText());
+                        break;
                     default:
                         break;
                 }
