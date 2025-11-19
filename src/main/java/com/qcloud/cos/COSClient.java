@@ -110,6 +110,8 @@ import com.qcloud.cos.model.ciModel.persistence.AIGameRecResponse;
 import com.qcloud.cos.model.ciModel.persistence.CIUploadResult;
 import com.qcloud.cos.model.ciModel.persistence.AIRecRequest;
 import com.qcloud.cos.model.ciModel.persistence.DetectCarResponse;
+import com.qcloud.cos.model.ciModel.persistence.DetectPetRequest;
+import com.qcloud.cos.model.ciModel.persistence.DetectPetResponse;
 import com.qcloud.cos.model.ciModel.queue.DocListQueueResponse;
 import com.qcloud.cos.model.ciModel.queue.DocQueueRequest;
 import com.qcloud.cos.model.ciModel.queue.MediaListQueueResponse;
@@ -5822,5 +5824,66 @@ public class COSClient implements COS {
 
         return invoke(request, new Unmarshallers.AigcMetadataUnmarshaller());
     }
+
+    @Override
+    public AIGCMetadataResponse getDocumentAIGCMetadata(String bucketName, String key) {
+        rejectNull(bucketName, "The bucket name parameter must be specified when getting document AIGC metadata");
+        rejectNull(key, "The key parameter must be specified when getting document AIGC metadata");
+
+        GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, key);
+        CosHttpRequest<GetObjectRequest> request = createRequest(bucketName, key, getObjectRequest, HttpMethodName.GET);
+        request.addParameter("ci-process", "DocAIGCMetadata");
+
+        return invoke(request, new Unmarshallers.AigcMetadataUnmarshaller());
+    }
+
+    @Override
+    public CreatePosterProductionResponse createPosterProduction(CreatePosterProductionRequest customRequest) {
+        rejectNull(customRequest, "The request parameter must be specified setting the object tags");
+
+        CosHttpRequest<CreatePosterProductionRequest> request = createRequest(customRequest.getBucketName(), "/pic_jobs", customRequest , HttpMethodName.POST);
+
+        this.setContent(request, CIAuditingXmlFactoryV2.convertToXmlByteArray( customRequest ), "application/xml", false);
+        return invoke(request, new Unmarshallers.CICommonUnmarshaller<CreatePosterProductionResponse>(CreatePosterProductionResponse.class));
+    }
+
+    @Override 
+    public VirusDetectResponse createVirusDetectJob(VirusDetectRequest request) {
+        CosHttpRequest<VirusDetectRequest> req = createRequest(request.getBucketName(), "/virus/detect", request, HttpMethodName.POST);
+        this.setContent(req, CIAuditingXmlFactoryV2.convertToXmlByteArray(request), "application/xml", false);
+        return invoke(req, new Unmarshallers.CICommonUnmarshaller<VirusDetectResponse>(VirusDetectResponse.class));
+    }
+
+    @Override
+    public VirusDetectJobResponse describeVirusDetectJob(VirusDetectJobRequest request) {
+        rejectNull(request, "The request parameter must be specified");
+        rejectNull(request.getJobId(), "The jobId parameter must be specified");
+        rejectNull(request.getBucketName(), "The bucketName parameter must be specified");
+
+        CosHttpRequest<VirusDetectJobRequest> req = createRequest(request.getBucketName(), "/virus/detect/" + request.getJobId(), request, HttpMethodName.GET);
+        return invoke(req, new Unmarshallers.CICommonUnmarshaller<VirusDetectJobResponse>(VirusDetectJobResponse.class));
+    }
+
+    @Override
+    public DetectPetResponse detectPet(DetectPetRequest detectPetRequest) {
+        rejectNull(detectPetRequest.getBucketName(),
+                "The bucketName parameter must be specified setting the object tags");
+        CosHttpRequest<DetectPetRequest> request = createRequest(detectPetRequest.getBucketName(), detectPetRequest.getObjectKey(), detectPetRequest, HttpMethodName.GET);
+        request.addParameter("ci-process", "detect-pet");
+        return invoke(request, new Unmarshallers.CICommonUnmarshaller<DetectPetResponse>(DetectPetResponse.class));
+    }
+
+    @Override
+    public DocAIGCMetadataJobResponse createDocAIGCMetadataJob(DocAIGCMetadataJobRequest request) {
+        rejectNull(request, "The request parameter must be specified when creating document AIGC metadata job");
+        rejectNull(request.getBucketName(), "The bucket name parameter must be specified when creating document AIGC metadata job");
+
+        checkCIRequestCommon(request);
+        CosHttpRequest<DocAIGCMetadataJobRequest> httpRequest = createRequest(request.getBucketName(), "/doc_jobs", request, HttpMethodName.POST);
+        this.setContent(httpRequest, CIAuditingXmlFactoryV2.convertToXmlByteArray( request ), "application/xml", false);
+
+        return invoke(httpRequest, new Unmarshallers.CICommonUnmarshaller<DocAIGCMetadataJobResponse>(DocAIGCMetadataJobResponse.class));
+    }
+
 }
 
