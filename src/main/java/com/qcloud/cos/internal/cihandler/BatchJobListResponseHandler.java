@@ -101,6 +101,9 @@ public class BatchJobListResponseHandler extends CIAbstractHandler {
                 case "CallBackType":
                     operation.setCallBackType(getText());
                     break;
+                case "WorkflowIds":
+                    operation.setWorkflowIds(getText());
+                    break;
                 default:
                     break;
             }

@@ -165,6 +165,7 @@ public class BatchJobOperation {
         sb.append(", callBack='").append(callBack).append('\'');
         sb.append(", callBackMqConfig='").append(callBackMqConfig).append('\'');
         sb.append(", callBackKafkaConfig='").append(callBackKafkaConfig).append('\'');
+        sb.append(", workflowIds='").append(workflowIds).append('\'');
         sb.append('}');
         return sb.toString();
     }
