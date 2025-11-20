@@ -36,11 +36,14 @@ import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.exception.CosServiceException;
 import com.qcloud.cos.exception.MultiObjectDeleteException.DeleteError;
 import com.qcloud.cos.internal.cihandler.AIGameRecResponseHandler;
+import com.qcloud.cos.internal.cihandler.AIObjectDetectHandler;
 import com.qcloud.cos.internal.cihandler.AutoTranslationBlockResponseHandler;
+import com.qcloud.cos.internal.cihandler.BatchJobListResponseHandler;
 import com.qcloud.cos.internal.cihandler.BatchJobResponseHandler;
 import com.qcloud.cos.internal.cihandler.CIXmlResponsesSaxParser;
 import com.qcloud.cos.internal.cihandler.DetectCarHandler;
 import com.qcloud.cos.internal.cihandler.DetectFaceResponseHandler;
+import com.qcloud.cos.internal.cihandler.FileHashCodeSyncResponseHandler;
 import com.qcloud.cos.internal.cihandler.FileProcessResponseHandler;
 import com.qcloud.cos.internal.cihandler.GenerateQrcodeHandler;
 import com.qcloud.cos.internal.cihandler.GetImageStyleHandler;
@@ -754,6 +757,12 @@ public class XmlResponsesSaxParser {
         return handler;
     }
 
+    public BatchJobListResponseHandler parseBatchJobListResponse(InputStream inputStream) throws IOException {
+        BatchJobListResponseHandler handler = new BatchJobListResponseHandler();
+        parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
+        return handler;
+    }
+
     public DescribeMediaJobsHandler parseMediaJobsRespones(InputStream inputStream) throws IOException {
         DescribeMediaJobsHandler handler = new DescribeMediaJobsHandler();
         parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
@@ -871,6 +880,12 @@ public class XmlResponsesSaxParser {
 
     public DetectCarHandler parseDetectCarResponse(InputStream inputStream) throws IOException {
         DetectCarHandler handler = new DetectCarHandler();
+        parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
+        return handler;
+    }
+
+    public AIObjectDetectHandler parseAIObjectDetectResponse(InputStream inputStream) throws IOException {
+        AIObjectDetectHandler handler = new AIObjectDetectHandler();
         parseXmlInputStream(handler, sanitizeXmlDocument(handler, inputStream));
         return handler;
     }
@@ -7251,6 +7266,15 @@ public class XmlResponsesSaxParser {
                 }
             }
         }
+    }
+
+    /**
+     * 解析文件哈希值同步计算响应
+     */
+    public FileHashCodeSyncResponseHandler parseFileHashCodeSyncResponse(InputStream inputStream) throws IOException {
+        FileHashCodeSyncResponseHandler handler = new FileHashCodeSyncResponseHandler();
+        parseXmlInputStream(handler, inputStream);
+        return handler;
     }
 }
 

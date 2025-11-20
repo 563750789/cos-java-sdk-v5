@@ -368,6 +368,7 @@ public class CIMediaXmlFactory {
         xml.start("Operation");
         addTimeInterval(xml, operation.getTimeInterval());
         addIfNotNull(xml, "QueueId", operation.getQueueId());
+        addIfNotNull(xml, "QueueType", operation.getQueueType());
         addIfNotNull(xml, "UserData", operation.getUserData());
         addIfNotNull(xml, "CallBack", operation.getCallBack());
         addIfNotNull(xml, "Tag", operation.getTag());

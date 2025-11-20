@@ -3137,6 +3137,10 @@ public interface COS extends COSDirectSpi {
 
     DetectCarResponse detectCar(AIRecRequest request);
 
+    CreateAIObjectDetectJobResponse createAIObjectDetectJob(CreateAIObjectDetectJobRequest request);
+
+    AIPortraitMattingResponse aiPortraitMatting(AIPortraitMattingRequest request);
+
     boolean openImageSearch(OpenImageSearchRequest imageSearchRequest);
 
     boolean addGalleryImages(ImageSearchRequest request);
@@ -3201,6 +3205,10 @@ public interface COS extends COSDirectSpi {
     BatchJobResponse createInventoryTriggerJob(BatchJobRequest request);
 
     BatchJobResponse describeInventoryTriggerJob(BatchJobRequest request);
+
+    BatchJobListResponse describeInventoryTriggerJobs(BatchJobRequest request);
+
+    Boolean cancelInventoryTriggerJob(BatchJobRequest request);
 
     AutoTranslationBlockResponse autoTranslationBlock(AutoTranslationBlockRequest request);
 
