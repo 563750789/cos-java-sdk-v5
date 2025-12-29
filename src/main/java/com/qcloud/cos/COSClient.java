@@ -4752,6 +4752,43 @@ public class COSClient implements COS {
     }
 
     @Override
+    public CreateAIObjectDetectJobResponse createAIObjectDetectJob(CreateAIObjectDetectJobRequest aiObjectDetectRequest) {
+        rejectNull(aiObjectDetectRequest.getBucketName(),
+                "The bucketName parameter must be specified for AI object detect");
+        CosHttpRequest<CreateAIObjectDetectJobRequest> request = createRequest(
+                aiObjectDetectRequest.getBucketName(), 
+                aiObjectDetectRequest.getObjectKey(), 
+                aiObjectDetectRequest, 
+                HttpMethodName.GET);
+        request.addParameter("ci-process", "AIObjectDetect");
+        addParameterIfNotNull(request, "detect-url", aiObjectDetectRequest.getDetectUrl());
+        return invoke(request, new Unmarshallers.AIObjectDetectUnmarshaller());
+    }
+
+    @Override
+    public AIPortraitMattingResponse aiPortraitMatting(AIPortraitMattingRequest aiPortraitMattingRequest) {
+        rejectNull(aiPortraitMattingRequest.getBucketName(),
+                "The bucketName parameter must be specified for AI portrait matting");
+        CosHttpRequest<AIPortraitMattingRequest> request = createRequest(
+                aiPortraitMattingRequest.getBucketName(),
+                aiPortraitMattingRequest.getObjectKey(),
+                aiPortraitMattingRequest,
+                HttpMethodName.GET);
+        request.addParameter("ci-process", "AIPortraitMatting");
+        addParameterIfNotNull(request, "detect-url", aiPortraitMattingRequest.getDetectUrl());
+        addParameterIfNotNull(request, "center-layout", 
+                aiPortraitMattingRequest.getCenterLayout() != null ? 
+                        String.valueOf(aiPortraitMattingRequest.getCenterLayout()) : null);
+        addParameterIfNotNull(request, "padding-layout", aiPortraitMattingRequest.getPaddingLayout());
+        
+        COSObject cosObject = invoke(request, new COSObjectResponseHandler());
+        AIPortraitMattingResponse response = new AIPortraitMattingResponse();
+        response.setImageStream(cosObject.getObjectContent());
+        response.setMetadata(cosObject.getObjectMetadata());
+        return response;
+    }
+
+    @Override
     public boolean openImageSearch(OpenImageSearchRequest imageSearchRequest) {
         rejectNull(imageSearchRequest,
                 "The request parameter must be specified setting the object tags");
@@ -5043,6 +5080,31 @@ public class COSClient implements COS {
         this.checkCIRequestCommon(request);
         CosHttpRequest<BatchJobRequest> httpRequest = this.createRequest(request.getBucketName(), "/inventorytriggerjob/" + request.getJobId(), request, HttpMethodName.GET);
         return this.invoke(httpRequest, new Unmarshallers.BatchJobUnmarshaller());
+    }
+
+    @Override
+    public BatchJobListResponse describeInventoryTriggerJobs(BatchJobRequest request) {
+        this.checkCIRequestCommon(request);
+        CosHttpRequest<BatchJobRequest> httpRequest = this.createRequest(request.getBucketName(), "/inventorytriggerjob", request, HttpMethodName.GET);
+        addParameterIfNotNull(httpRequest, "orderByTime", request.getOrderByTime());
+        addParameterIfNotNull(httpRequest, "nextToken", request.getNextToken());
+        addParameterIfNotNull(httpRequest, "size", request.getSize() != null ? request.getSize().toString() : null);
+        addParameterIfNotNull(httpRequest, "states", request.getStates());
+        addParameterIfNotNull(httpRequest, "startCreationTime", request.getStartCreationTime());
+        addParameterIfNotNull(httpRequest, "endCreationTime", request.getEndCreationTime());
+        addParameterIfNotNull(httpRequest, "workflowId", request.getWorkflowId());
+        addParameterIfNotNull(httpRequest, "jobId", request.getJobId());
+        addParameterIfNotNull(httpRequest, "name", request.getName());
+        return this.invoke(httpRequest, new Unmarshallers.BatchJobListUnmarshaller());
+    }
+
+    @Override
+    public Boolean cancelInventoryTriggerJob(BatchJobRequest request) {
+        this.checkCIRequestCommon(request);
+        CosHttpRequest<BatchJobRequest> httpRequest = this.createRequest(request.getBucketName(), "/inventorytriggerjob/" + request.getJobId(), request, HttpMethodName.PUT);
+        httpRequest.addParameter("cancel", null);
+        invoke(httpRequest, voidCosResponseHandler);
+        return true;
     }
 
     @Override
@@ -5883,6 +5945,28 @@ public class COSClient implements COS {
         this.setContent(httpRequest, CIAuditingXmlFactoryV2.convertToXmlByteArray( request ), "application/xml", false);
 
         return invoke(httpRequest, new Unmarshallers.CICommonUnmarshaller<DocAIGCMetadataJobResponse>(DocAIGCMetadataJobResponse.class));
+    }
+
+    /**
+     * 同步计算文件哈希值
+     * 详情见 https://cloud.tencent.com/document/product/460/83084
+     */
+    public FileHashCodeSyncResponse fileHashCodeSync(FileHashCodeSyncRequest fileHashCodeSyncRequest) {
+        rejectNull(fileHashCodeSyncRequest.getBucketName(),
+                "The bucketName parameter must be specified for file hash code sync calculation");
+        rejectNull(fileHashCodeSyncRequest.getObjectKey(),
+                "The objectKey parameter must be specified for file hash code sync calculation");
+        
+        CosHttpRequest<FileHashCodeSyncRequest> request = createRequest(
+                fileHashCodeSyncRequest.getBucketName(),
+                fileHashCodeSyncRequest.getObjectKey(),
+                fileHashCodeSyncRequest,
+                HttpMethodName.GET);
+        request.addParameter("ci-process", "filehash");
+        addParameterIfNotNull(request, "type", fileHashCodeSyncRequest.getType());
+        addParameterIfNotNull(request, "addtoheader", fileHashCodeSyncRequest.getAddToHeader());
+        
+        return invoke(request, new COSXmlResponseHandler<>(new Unmarshallers.FileHashCodeSyncResponseUnmarshaller()));
     }
 
 }

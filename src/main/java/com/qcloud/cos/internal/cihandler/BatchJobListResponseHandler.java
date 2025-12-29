@@ -2,13 +2,10 @@ package com.qcloud.cos.internal.cihandler;
 
 import com.qcloud.cos.internal.ParserMediaInfoUtils;
 import com.qcloud.cos.model.ciModel.common.BatchInputObject;
-import com.qcloud.cos.model.ciModel.common.MediaInputObject;
 import com.qcloud.cos.model.ciModel.job.AigcMetadata;
 import com.qcloud.cos.model.ciModel.job.BatchJobDetail;
+import com.qcloud.cos.model.ciModel.job.BatchJobListResponse;
 import com.qcloud.cos.model.ciModel.job.BatchJobOperation;
-import com.qcloud.cos.model.ciModel.job.BatchJobResponse;
-import com.qcloud.cos.model.ciModel.job.MediaJobObject;
-import com.qcloud.cos.model.ciModel.job.MediaJobOperation;
 import com.qcloud.cos.model.ciModel.job.MediaPicProcessTemplateObject;
 import com.qcloud.cos.model.ciModel.job.MediaTimeIntervalObject;
 import com.qcloud.cos.model.ciModel.job.ProcessResult;
@@ -16,20 +13,37 @@ import com.qcloud.cos.model.ciModel.persistence.ImageInfo;
 import com.qcloud.cos.model.ciModel.template.MediaSegmentObject;
 import org.xml.sax.Attributes;
 
-public class BatchJobResponseHandler extends CIAbstractHandler {
-    BatchJobResponse response = new BatchJobResponse();
+import java.util.List;
+
+/**
+ * 批量任务列表响应处理器
+ */
+public class BatchJobListResponseHandler extends CIAbstractHandler {
+    BatchJobListResponse response = new BatchJobListResponse();
 
     @Override
     protected void doStartElement(String uri, String name, String qName, Attributes attrs) {
-
+        List<BatchJobDetail> jobsDetailList = response.getJobsDetailList();
+        if ("JobsDetail".equalsIgnoreCase(name)) {
+            jobsDetailList.add(new BatchJobDetail());
+        }
     }
 
     @Override
     protected void doEndElement(String uri, String name, String qName) {
-        BatchJobDetail jobDetail = response.getJobDetail();
+        List<BatchJobDetail> jobsDetailList = response.getJobsDetailList();
+        BatchJobDetail jobDetail;
+        if (jobsDetailList.isEmpty()) {
+            jobDetail = new BatchJobDetail();
+        } else {
+            jobDetail = jobsDetailList.get(jobsDetailList.size() - 1);
+        }
+
         if (in("Response")) {
             if ("RequestId".equalsIgnoreCase(name)) {
                 response.setRequestId(getText());
+            } else if ("NextToken".equalsIgnoreCase(name)) {
+                response.setNextToken(getText());
             }
         } else if (in("Response", "JobsDetail")) {
             switch (name) {
@@ -64,7 +78,7 @@ public class BatchJobResponseHandler extends CIAbstractHandler {
             BatchInputObject input = jobDetail.getInput();
             ParserMediaInfoUtils.ParsingInput(input, name, getText());
         } else if (in("Response", "JobsDetail", "Operation")) {
-            BatchJobOperation operation = response.getJobDetail().getOperation();
+            BatchJobOperation operation = jobDetail.getOperation();
             switch (name) {
                 case "QueueId":
                     operation.setQueueId(getText());
@@ -94,7 +108,7 @@ public class BatchJobResponseHandler extends CIAbstractHandler {
                     break;
             }
         } else if (in("Response", "JobsDetail", "Operation", "TimeInterval")) {
-            MediaTimeIntervalObject timeInterval = response.getJobDetail().getOperation().getTimeInterval();
+            MediaTimeIntervalObject timeInterval = jobDetail.getOperation().getTimeInterval();
             switch (name) {
                 case "Duration":
                     timeInterval.setDuration(getText());
@@ -114,13 +128,6 @@ public class BatchJobResponseHandler extends CIAbstractHandler {
             }
         } else if (in("Response", "JobsDetail", "Operation", "Output")) {
             ParserMediaInfoUtils.ParsingOutput(jobDetail.getOperation().getOutput(), name, getText());
-        } else if (in("Response", "JobsDetail", "Operation", "JobParam", "PicProcess")) {
-            MediaPicProcessTemplateObject picProcess = jobDetail.getOperation().getJobParam().getPicProcess();
-            if ("IsPicInfo".equalsIgnoreCase(name)) {
-                picProcess.setIsPicInfo(getText());
-            } else if ("ProcessRule".equalsIgnoreCase(name)) {
-                picProcess.setProcessRule(getText());
-            }
         } else if (in("Response", "JobsDetail", "Operation", "JobParam", "PicProcess")) {
             MediaPicProcessTemplateObject picProcess = jobDetail.getOperation().getJobParam().getPicProcess();
             if ("IsPicInfo".equalsIgnoreCase(name)) {
@@ -151,7 +158,7 @@ public class BatchJobResponseHandler extends CIAbstractHandler {
         }
     }
 
-    public BatchJobResponse getResponse() {
+    public BatchJobListResponse getResponse() {
         return response;
     }
 }
