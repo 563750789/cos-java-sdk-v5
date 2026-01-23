@@ -53,6 +53,7 @@ import com.qcloud.cos.endpoint.CIPicRegionEndpointBuilder;
 import com.qcloud.cos.endpoint.CIRegionEndpointBuilder;
 import com.qcloud.cos.endpoint.EndpointBuilder;
 import com.qcloud.cos.endpoint.RegionEndpointBuilder;
+import com.qcloud.cos.endpoint.UserSpecifiedEndpointBuilder;
 import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.exception.CosServiceException;
 import com.qcloud.cos.exception.CosServiceException.ErrorType;
@@ -512,7 +513,7 @@ public class COSClient implements COS {
             bucket = formatBucket(bucket, fetchCredential().getCOSAppId());
             if (request.getOriginalRequest() instanceof CIPicServiceRequest) {
                 endpoint = new CIPicRegionEndpointBuilder(clientConfig.getRegion()).buildGeneralApiEndpoint(bucket);
-            } else if (isCIRequest) {
+            } else if (isCIRequest && !(clientConfig.getEndpointBuilder() instanceof UserSpecifiedEndpointBuilder)) {
                 endpoint = new CIRegionEndpointBuilder(clientConfig.getRegion()).buildGeneralApiEndpoint(bucket);
             } else {
                 endpoint = clientConfig.getEndpointBuilder().buildGeneralApiEndpoint(bucket);
@@ -4609,6 +4610,8 @@ public class COSClient implements COS {
         putIfNotNull(params, "imageDpi", originalRequest.getImageDpi());
         putIfNotNull(params, "type", originalRequest.getType());
         putIfNotNull(params, "text", originalRequest.getText());
+        putIfNotNull(params, "weboffice_url", "1");
+        putIfNotNull(params, "tokenuid", "mark");
         URL url = generatePresignedUrl(request.getBucketName(), request.getResourcePath(), expiredTime, HttpMethodName.GET, new HashMap<String, String>(), params, false, false);
         return url.toString();
     }

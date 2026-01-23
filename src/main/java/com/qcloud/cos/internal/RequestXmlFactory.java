@@ -674,7 +674,8 @@ public class RequestXmlFactory {
         xml.start("QueueId").value(docJobObject.getQueueId()).end();
 
         xml.start("Input");
-        xml.start("Object").value(docJobObject.getInput().getObject()).end();
+        addIfNotNull(xml, "Object", docJobObject.getInput().getObject());
+        addIfNotNull(xml, "Url", docJobObject.getInput().getUrl());
         xml.end();
 
         if (CheckObjectUtils.objIsNotValid(docJobObject)) {
