@@ -56,6 +56,8 @@ import com.qcloud.cos.model.ciModel.persistence.AIGameRecResponse;
 import com.qcloud.cos.model.ciModel.persistence.CIUploadResult;
 import com.qcloud.cos.model.ciModel.persistence.AIRecRequest;
 import com.qcloud.cos.model.ciModel.persistence.DetectCarResponse;
+import com.qcloud.cos.model.ciModel.persistence.DetectPetRequest;
+import com.qcloud.cos.model.ciModel.persistence.DetectPetResponse;
 import com.qcloud.cos.model.ciModel.queue.DocListQueueResponse;
 import com.qcloud.cos.model.ciModel.queue.DocQueueRequest;
 import com.qcloud.cos.model.ciModel.queue.MediaListQueueResponse;
@@ -3135,6 +3137,10 @@ public interface COS extends COSDirectSpi {
 
     DetectCarResponse detectCar(AIRecRequest request);
 
+    CreateAIObjectDetectJobResponse createAIObjectDetectJob(CreateAIObjectDetectJobRequest request);
+
+    AIPortraitMattingResponse aiPortraitMatting(AIPortraitMattingRequest request);
+
     boolean openImageSearch(OpenImageSearchRequest imageSearchRequest);
 
     boolean addGalleryImages(ImageSearchRequest request);
@@ -3199,6 +3205,10 @@ public interface COS extends COSDirectSpi {
     BatchJobResponse createInventoryTriggerJob(BatchJobRequest request);
 
     BatchJobResponse describeInventoryTriggerJob(BatchJobRequest request);
+
+    BatchJobListResponse describeInventoryTriggerJobs(BatchJobRequest request);
+
+    Boolean cancelInventoryTriggerJob(BatchJobRequest request);
 
     AutoTranslationBlockResponse autoTranslationBlock(AutoTranslationBlockRequest request);
 
@@ -3308,6 +3318,16 @@ public interface COS extends COSDirectSpi {
     AIGCMetadataResponse getImageAIGCMetadata(String bucketName, String key);
 
     AIGCMetadataResponse getMediaAIGCMetadata(String bucketName, String key);
+
+    AIGCMetadataResponse getDocumentAIGCMetadata(String bucketName, String key);
+
+    CreatePosterProductionResponse createPosterProduction(CreatePosterProductionRequest customRequest);
+
+    VirusDetectResponse createVirusDetectJob(VirusDetectRequest request);
+
+    VirusDetectJobResponse describeVirusDetectJob(VirusDetectJobRequest request);
+
+    DocAIGCMetadataJobResponse createDocAIGCMetadataJob(DocAIGCMetadataJobRequest request);
+
+    DetectPetResponse detectPet(DetectPetRequest detectPetRequest);
 }
-
-
