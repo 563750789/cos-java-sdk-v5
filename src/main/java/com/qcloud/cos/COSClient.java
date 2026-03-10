@@ -4588,7 +4588,6 @@ public class COSClient implements COS {
         putIfNotNull(params, "imageDpi", originalRequest.getImageDpi());
         putIfNotNull(params, "type", originalRequest.getType());
         putIfNotNull(params, "text", originalRequest.getText());
-        putIfNotNull(params, "weboffice_url", "1");
         URL url = generatePresignedUrl(request.getBucketName(), request.getResourcePath(), expiredTime, HttpMethodName.GET, new HashMap<String, String>(), params, false, false);
         return url.toString();
     }
