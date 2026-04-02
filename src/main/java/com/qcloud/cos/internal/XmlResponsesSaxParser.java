@@ -74,14 +74,17 @@ import com.qcloud.cos.model.ciModel.auditing.BatchImageJobDetail;
 import com.qcloud.cos.model.ciModel.auditing.DocumentAuditingJobsDetail;
 import com.qcloud.cos.model.ciModel.auditing.DocumentAuditingResponse;
 import com.qcloud.cos.model.ciModel.auditing.DocumentResultInfo;
+import com.qcloud.cos.model.ciModel.auditing.HitInfo;
 import com.qcloud.cos.model.ciModel.auditing.ImageAuditingResponse;
 import com.qcloud.cos.model.ciModel.auditing.LanguageResult;
 import com.qcloud.cos.model.ciModel.auditing.LibResult;
 import com.qcloud.cos.model.ciModel.auditing.ListResult;
+import com.qcloud.cos.model.ciModel.auditing.OcrHitInfos;
 import com.qcloud.cos.model.ciModel.auditing.ObjectResults;
 import com.qcloud.cos.model.ciModel.auditing.SectionInfo;
 import com.qcloud.cos.model.ciModel.auditing.SnapshotInfo;
 import com.qcloud.cos.model.ciModel.auditing.TextAuditingResponse;
+import com.qcloud.cos.model.ciModel.auditing.TextPosition;
 import com.qcloud.cos.model.ciModel.auditing.VideoAuditingResponse;
 import com.qcloud.cos.model.ciModel.auditing.WebpageAuditingJobsDetail;
 import com.qcloud.cos.model.ciModel.auditing.WebpageAuditingResponse;
@@ -5687,7 +5690,25 @@ public class XmlResponsesSaxParser {
 
         @Override
         protected void doStartElement(String uri, String name, String qName, Attributes attrs) {
-
+            if (in("RecognitionResult") && "OcrHitInfos".equals(name)) {
+                OcrHitInfos ocrHitInfos = new OcrHitInfos();
+                ocrHitInfos.setHitInfos(new java.util.ArrayList<>());
+                response.setOcrHitInfos(ocrHitInfos);
+            } else if (in("RecognitionResult", "OcrHitInfos") && "HitInfos".equals(name)) {
+                OcrHitInfos ocrHitInfos = response.getOcrHitInfos();
+                if (ocrHitInfos != null) {
+                    ocrHitInfos.getHitInfos().add(new HitInfo());
+                }
+            } else if (in("RecognitionResult", "OcrHitInfos", "HitInfos") && "Positions".equals(name)) {
+                OcrHitInfos ocrHitInfos = response.getOcrHitInfos();
+                if (ocrHitInfos != null && ocrHitInfos.getHitInfos() != null && !ocrHitInfos.getHitInfos().isEmpty()) {
+                    HitInfo hitInfo = ocrHitInfos.getHitInfos().get(ocrHitInfos.getHitInfos().size() - 1);
+                    if (hitInfo.getPositions() == null) {
+                        hitInfo.setPositions(new java.util.ArrayList<>());
+                    }
+                    hitInfo.getPositions().add(new TextPosition());
+                }
+            }
         }
 
         @Override
@@ -5727,6 +5748,7 @@ public class XmlResponsesSaxParser {
                     case "State":
                         response.setState(getText());
                         break;
+                    case "ForbidState":
                     case "forbidState":
                         response.setForbidState(getText());
                         break;
@@ -5757,6 +5779,16 @@ public class XmlResponsesSaxParser {
                 ParserMediaInfoUtils.parseOrcInfo(response.getTeenagerInfo().getOcrResults(), name, getText());
             } else if (in("RecognitionResult","PoliticsInfo","ObjectResults")) {
                 ParserMediaInfoUtils.parseObjectResultsInfo(response.getPoliticsInfo().getPoliticsInfoObjectResults(), name, getText());
+            } else if (in("RecognitionResult", "OcrHitInfos")) {
+                ParserMediaInfoUtils.parseOcrHitInfos(response.getOcrHitInfos(), name, getText());
+            } else if (in("RecognitionResult", "OcrHitInfos", "HitInfos")) {
+                if (response.getOcrHitInfos() != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfo(response.getOcrHitInfos().getHitInfos(), name, getText());
+                }
+            } else if (in("RecognitionResult", "OcrHitInfos", "HitInfos", "Positions")) {
+                if (response.getOcrHitInfos() != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfoPosition(response.getOcrHitInfos().getHitInfos(), name, getText());
+                }
             }
         }
 
@@ -5779,6 +5811,9 @@ public class XmlResponsesSaxParser {
                     break;
                 case "SubLabel":
                     obj.setSubLabel(getText());
+                    break;
+                case "Category":
+                    obj.setCategory(getText());
                     break;
                 default:
                     break;
@@ -5805,6 +5840,52 @@ public class XmlResponsesSaxParser {
                 audioSectionList.add(new AudioSectionInfo());
             } else if (in("Response", "JobsDetail", "ListInfo") && "ListResults".equals(name)) {
                 response.getJobsDetail().getListInfo().getListResults().add(new ListResult());
+            } else if (in("Response", "JobsDetail") && "OcrHitInfos".equals(name)) {
+                OcrHitInfos ocrHitInfos = new OcrHitInfos();
+                ocrHitInfos.setHitInfos(new java.util.ArrayList<>());
+                response.getJobsDetail().setOcrHitInfos(ocrHitInfos);
+            } else if (in("Response", "JobsDetail", "OcrHitInfos") && "HitInfos".equals(name)) {
+                OcrHitInfos ocrHitInfos = response.getJobsDetail().getOcrHitInfos();
+                if (ocrHitInfos != null) {
+                    ocrHitInfos.getHitInfos().add(new HitInfo());
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos") && "Positions".equals(name)) {
+                OcrHitInfos ocrHitInfos = response.getJobsDetail().getOcrHitInfos();
+                if (ocrHitInfos != null && ocrHitInfos.getHitInfos() != null && !ocrHitInfos.getHitInfos().isEmpty()) {
+                    HitInfo hitInfo = ocrHitInfos.getHitInfos().get(ocrHitInfos.getHitInfos().size() - 1);
+                    if (hitInfo.getPositions() == null) {
+                        hitInfo.setPositions(new java.util.ArrayList<>());
+                    }
+                    hitInfo.getPositions().add(new TextPosition());
+                }
+            } else if (in("Response", "JobsDetail", "Snapshot") && "OcrHitInfos".equals(name)) {
+                List<SnapshotInfo> snapshotList2 = response.getJobsDetail().getSnapshotList();
+                if (snapshotList2 != null && !snapshotList2.isEmpty()) {
+                    SnapshotInfo currentSnapshot = snapshotList2.get(snapshotList2.size() - 1);
+                    OcrHitInfos ocrHitInfos = new OcrHitInfos();
+                    ocrHitInfos.setHitInfos(new java.util.ArrayList<>());
+                    currentSnapshot.setOcrHitInfos(ocrHitInfos);
+                }
+            } else if (in("Response", "JobsDetail", "Snapshot", "OcrHitInfos") && "HitInfos".equals(name)) {
+                List<SnapshotInfo> snapshotList2 = response.getJobsDetail().getSnapshotList();
+                if (snapshotList2 != null && !snapshotList2.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = snapshotList2.get(snapshotList2.size() - 1).getOcrHitInfos();
+                    if (ocrHitInfos != null) {
+                        ocrHitInfos.getHitInfos().add(new HitInfo());
+                    }
+                }
+            } else if (in("Response", "JobsDetail", "Snapshot", "OcrHitInfos", "HitInfos") && "Positions".equals(name)) {
+                List<SnapshotInfo> snapshotList2 = response.getJobsDetail().getSnapshotList();
+                if (snapshotList2 != null && !snapshotList2.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = snapshotList2.get(snapshotList2.size() - 1).getOcrHitInfos();
+                    if (ocrHitInfos != null && ocrHitInfos.getHitInfos() != null && !ocrHitInfos.getHitInfos().isEmpty()) {
+                        HitInfo hitInfo = ocrHitInfos.getHitInfos().get(ocrHitInfos.getHitInfos().size() - 1);
+                        if (hitInfo.getPositions() == null) {
+                            hitInfo.setPositions(new java.util.ArrayList<>());
+                        }
+                        hitInfo.getPositions().add(new TextPosition());
+                    }
+                }
             }
         }
 
@@ -5911,6 +5992,42 @@ public class XmlResponsesSaxParser {
                 ParserMediaInfoUtils.ParsingAuditingRecordInfo(response.getJobsDetail().getMaskInfo().getRecordInfo(), name, getText());
             } else if (in("Response", "JobsDetail", "MaskInfo", "RecordInfo", "Output")) {
                 ParserMediaInfoUtils.ParsingAuditingOutput(response.getJobsDetail().getMaskInfo().getRecordInfo().getOutput(), name, getText());
+            } else if (in("Response", "JobsDetail", "OcrHitInfos")) {
+                ParserMediaInfoUtils.parseOcrHitInfos(response.getJobsDetail().getOcrHitInfos(), name, getText());
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos")) {
+                OcrHitInfos ocrHitInfos = response.getJobsDetail().getOcrHitInfos();
+                if (ocrHitInfos != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfo(ocrHitInfos.getHitInfos(), name, getText());
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos", "Positions")) {
+                OcrHitInfos ocrHitInfos = response.getJobsDetail().getOcrHitInfos();
+                if (ocrHitInfos != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfoPosition(ocrHitInfos.getHitInfos(), name, getText());
+                }
+            } else if (in("Response", "JobsDetail", "Snapshot", "OcrHitInfos")) {
+                List<SnapshotInfo> snapshotList2 = response.getJobsDetail().getSnapshotList();
+                if (snapshotList2 != null && !snapshotList2.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = snapshotList2.get(snapshotList2.size() - 1).getOcrHitInfos();
+                    if (ocrHitInfos != null) {
+                        ParserMediaInfoUtils.parseOcrHitInfos(ocrHitInfos, name, getText());
+                    }
+                }
+            } else if (in("Response", "JobsDetail", "Snapshot", "OcrHitInfos", "HitInfos")) {
+                List<SnapshotInfo> snapshotList2 = response.getJobsDetail().getSnapshotList();
+                if (snapshotList2 != null && !snapshotList2.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = snapshotList2.get(snapshotList2.size() - 1).getOcrHitInfos();
+                    if (ocrHitInfos != null) {
+                        ParserMediaInfoUtils.parseOcrHitInfo(ocrHitInfos.getHitInfos(), name, getText());
+                    }
+                }
+            } else if (in("Response", "JobsDetail", "Snapshot", "OcrHitInfos", "HitInfos", "Positions")) {
+                List<SnapshotInfo> snapshotList2 = response.getJobsDetail().getSnapshotList();
+                if (snapshotList2 != null && !snapshotList2.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = snapshotList2.get(snapshotList2.size() - 1).getOcrHitInfos();
+                    if (ocrHitInfos != null) {
+                        ParserMediaInfoUtils.parseOcrHitInfoPosition(ocrHitInfos.getHitInfos(), name, getText());
+                    }
+                }
             }
         }
 
@@ -6821,6 +6938,30 @@ public class XmlResponsesSaxParser {
                 jobList.get(jobList.size() - 1).getAdsInfo().getLibResults().add(new LibResult());
             } else if (in("Response", "JobsDetail", "TeenagerInfo") && "LibResults".equals(name)) {
                 jobList.get(jobList.size() - 1).getTeenagerInfo().getLibResults().add(new LibResult());
+            } else if (in("Response", "JobsDetail") && "OcrHitInfos".equals(name)) {
+                if (!jobList.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = new OcrHitInfos();
+                    ocrHitInfos.setHitInfos(new java.util.ArrayList<>());
+                    jobList.get(jobList.size() - 1).setOcrHitInfos(ocrHitInfos);
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos") && "HitInfos".equals(name)) {
+                if (!jobList.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = jobList.get(jobList.size() - 1).getOcrHitInfos();
+                    if (ocrHitInfos != null) {
+                        ocrHitInfos.getHitInfos().add(new HitInfo());
+                    }
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos") && "Positions".equals(name)) {
+                if (!jobList.isEmpty()) {
+                    OcrHitInfos ocrHitInfos = jobList.get(jobList.size() - 1).getOcrHitInfos();
+                    if (ocrHitInfos != null && ocrHitInfos.getHitInfos() != null && !ocrHitInfos.getHitInfos().isEmpty()) {
+                        HitInfo hitInfo = ocrHitInfos.getHitInfos().get(ocrHitInfos.getHitInfos().size() - 1);
+                        if (hitInfo.getPositions() == null) {
+                            hitInfo.setPositions(new java.util.ArrayList<>());
+                        }
+                        hitInfo.getPositions().add(new TextPosition());
+                    }
+                }
             }
         }
 
@@ -6879,6 +7020,16 @@ public class XmlResponsesSaxParser {
                 ParserMediaInfoUtils.parseOrcInfo(jobsDetail.getTerroristInfo().getOcrResults(), name, getText());
             } else if (in("Response", "JobsDetail", "AdsInfo", "OcrResults")) {
                 ParserMediaInfoUtils.parseOrcInfo(jobsDetail.getAdsInfo().getOcrResults(), name, getText());
+            } else if (in("Response", "JobsDetail", "OcrHitInfos")) {
+                ParserMediaInfoUtils.parseOcrHitInfos(jobsDetail.getOcrHitInfos(), name, getText());
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos")) {
+                if (jobsDetail.getOcrHitInfos() != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfo(jobsDetail.getOcrHitInfos().getHitInfos(), name, getText());
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos", "Positions")) {
+                if (jobsDetail.getOcrHitInfos() != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfoPosition(jobsDetail.getOcrHitInfos().getHitInfos(), name, getText());
+                }
             }
         }
 
@@ -6964,6 +7115,24 @@ public class XmlResponsesSaxParser {
         protected void doStartElement(String uri, String name, String qName, Attributes attrs) {
             if (in("Response", "JobsDetail", "ListInfo") && "ListResults".equals(name)) {
                 response.getListInfo().getListResults().add(new ListResult());
+            } else if (in("Response", "JobsDetail") && "OcrHitInfos".equals(name)) {
+                OcrHitInfos ocrHitInfos = new OcrHitInfos();
+                ocrHitInfos.setHitInfos(new java.util.ArrayList<>());
+                response.setOcrHitInfos(ocrHitInfos);
+            } else if (in("Response", "JobsDetail", "OcrHitInfos") && "HitInfos".equals(name)) {
+                OcrHitInfos ocrHitInfos = response.getOcrHitInfos();
+                if (ocrHitInfos != null) {
+                    ocrHitInfos.getHitInfos().add(new HitInfo());
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos") && "Positions".equals(name)) {
+                OcrHitInfos ocrHitInfos = response.getOcrHitInfos();
+                if (ocrHitInfos != null && ocrHitInfos.getHitInfos() != null && !ocrHitInfos.getHitInfos().isEmpty()) {
+                    HitInfo hitInfo = ocrHitInfos.getHitInfos().get(ocrHitInfos.getHitInfos().size() - 1);
+                    if (hitInfo.getPositions() == null) {
+                        hitInfo.setPositions(new java.util.ArrayList<>());
+                    }
+                    hitInfo.getPositions().add(new TextPosition());
+                }
             }
         }
 
@@ -7050,6 +7219,16 @@ public class XmlResponsesSaxParser {
                 List<ListResult> listResults = response.getListInfo().getListResults();
                 if (!listResults.isEmpty()) {
                     ParserMediaInfoUtils.parsingAuditingListResultInfo(listResults.get(listResults.size() - 1), name, getText());
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos")) {
+                ParserMediaInfoUtils.parseOcrHitInfos(response.getOcrHitInfos(), name, getText());
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos")) {
+                if (response.getOcrHitInfos() != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfo(response.getOcrHitInfos().getHitInfos(), name, getText());
+                }
+            } else if (in("Response", "JobsDetail", "OcrHitInfos", "HitInfos", "Positions")) {
+                if (response.getOcrHitInfos() != null) {
+                    ParserMediaInfoUtils.parseOcrHitInfoPosition(response.getOcrHitInfos().getHitInfos(), name, getText());
                 }
             }
         }
