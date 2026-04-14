@@ -150,12 +150,16 @@ public class ParserMediaInfoUtils {
                 break;
             case "Bitrate":
                 video.setBitrate(value);
+                break;
             case "Language":
                 video.setLanguage(value);
+                break;
             case "NumFrames":
                 video.setNumFrames(value);
+                break;
             case "CreationTime":
                 video.setCreationTime(value);
+                break;
             default:
                 break;
         }

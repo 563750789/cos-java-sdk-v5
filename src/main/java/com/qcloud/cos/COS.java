@@ -56,6 +56,8 @@ import com.qcloud.cos.model.ciModel.persistence.AIGameRecResponse;
 import com.qcloud.cos.model.ciModel.persistence.CIUploadResult;
 import com.qcloud.cos.model.ciModel.persistence.AIRecRequest;
 import com.qcloud.cos.model.ciModel.persistence.DetectCarResponse;
+import com.qcloud.cos.model.ciModel.image.AIImageAnalysisRequest;
+import com.qcloud.cos.model.ciModel.image.AIImageAnalysisResponse;
 import com.qcloud.cos.model.ciModel.persistence.DetectPetRequest;
 import com.qcloud.cos.model.ciModel.persistence.DetectPetResponse;
 import com.qcloud.cos.model.ciModel.queue.DocListQueueResponse;
@@ -3330,4 +3332,13 @@ public interface COS extends COSDirectSpi {
     DocAIGCMetadataJobResponse createDocAIGCMetadataJob(DocAIGCMetadataJobRequest request);
 
     DetectPetResponse detectPet(DetectPetRequest detectPetRequest);
+
+    /**
+     * 大模型图片分析接口，基于大模型能力提供通用图片分析功能。
+     * 当前支持 ImageLabels（标签模式）：返回图片整体描述和标签信息。
+     *
+     * @param aiImageAnalysisRequest 大模型图片分析请求
+     * @return 大模型图片分析响应，包含分析结果
+     */
+    AIImageAnalysisResponse aiImageAnalysis(AIImageAnalysisRequest aiImageAnalysisRequest);
 }

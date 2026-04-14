@@ -16,10 +16,11 @@ public class DetectPetDemo {
         COSClient client = ClientUtils.getTestClient();
         // 2 调用要使用的方法。
         detectPet(client);
+        detectPetWithUrl(client);
     }
 
     /**
-     * 宠物识别接口demo
+     * 宠物识别接口demo - 使用COS中的图片
      */
     public static void detectPet(COSClient client) {
         //1.创建任务请求对象
@@ -29,6 +30,22 @@ public class DetectPetDemo {
         request.setBucketName("demo-1234567890");
         //2.2设置bucket中的图片位置
         request.setObjectKey("pet.jpg");
+        DetectPetResponse response = client.detectPet(request);
+        System.out.println(Jackson.toJsonString(response));
+    }
+
+    /**
+     * 宠物识别接口demo - 使用外部图片URL
+     * objectKey与detectUrl二选一，如果同时存在，则默认以objectKey为准
+     */
+    public static void detectPetWithUrl(COSClient client) {
+        //1.创建任务请求对象
+        DetectPetRequest request = new DetectPetRequest();
+        //2.添加请求参数 参数详情请见api接口文档
+        //2.1设置请求bucket
+        request.setBucketName("demo-1234567890");
+        //2.2设置外部图片url（SDK会自动进行URL编码，不需要手动编码）
+        request.setDetectUrl("https://demo-1234567890.cos.ap-chongqing.myqcloud.com/pet.jpg");
         DetectPetResponse response = client.detectPet(request);
         System.out.println(Jackson.toJsonString(response));
     }

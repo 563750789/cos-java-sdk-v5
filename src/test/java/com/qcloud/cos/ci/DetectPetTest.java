@@ -33,4 +33,17 @@ public class DetectPetTest extends AbstractCOSClientCITest {
         DetectPetResponse detectPetResponse = cosclient.detectPet(request);
         System.out.println(detectPetResponse.toString());
     }
+
+    @Test
+    public void detectPetWithDetectUrl() {
+        DetectPetRequest request = new DetectPetRequest();
+
+        request.setBucketName("chongqingtest-1251704708");
+
+        // 使用外部图片URL（SDK会自动进行URL编码，不需要手动编码）
+        request.setDetectUrl("https://chongqingtest-1251704708.cos.ap-chongqing.myqcloud.com/SDK/AI/pet/dog1.png");
+
+        DetectPetResponse detectPetResponse = cosclient.detectPet(request);
+        System.out.println(detectPetResponse.toString());
+    }
 }

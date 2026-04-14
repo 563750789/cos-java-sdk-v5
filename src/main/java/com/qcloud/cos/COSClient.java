@@ -111,6 +111,8 @@ import com.qcloud.cos.model.ciModel.persistence.AIGameRecResponse;
 import com.qcloud.cos.model.ciModel.persistence.CIUploadResult;
 import com.qcloud.cos.model.ciModel.persistence.AIRecRequest;
 import com.qcloud.cos.model.ciModel.persistence.DetectCarResponse;
+import com.qcloud.cos.model.ciModel.image.AIImageAnalysisRequest;
+import com.qcloud.cos.model.ciModel.image.AIImageAnalysisResponse;
 import com.qcloud.cos.model.ciModel.persistence.DetectPetRequest;
 import com.qcloud.cos.model.ciModel.persistence.DetectPetResponse;
 import com.qcloud.cos.model.ciModel.queue.DocListQueueResponse;
@@ -4739,8 +4741,29 @@ public class COSClient implements COS {
                 aiObjectDetectRequest.getObjectKey(), 
                 aiObjectDetectRequest, 
                 HttpMethodName.GET);
-        request.addParameter("ci-process", "AIObjectDetect");
+        // 通用参数
+        request.addParameter("ci-process", aiObjectDetectRequest.getCiProcess());
         addParameterIfNotNull(request, "detect-url", aiObjectDetectRequest.getDetectUrl());
+        // 图像超分 AISuperResolution 特有参数
+        addParameterIfNotNull(request, "magnify", aiObjectDetectRequest.getMagnify());
+        // 图像增强 AIEnhanceImage 特有参数
+        addParameterIfNotNull(request, "denoise", aiObjectDetectRequest.getDenoise());
+        addParameterIfNotNull(request, "sharpen", aiObjectDetectRequest.getSharpen());
+        // 图像智能裁剪 AIImageCrop 特有参数
+        addParameterIfNotNull(request, "width", aiObjectDetectRequest.getWidth());
+        addParameterIfNotNull(request, "height", aiObjectDetectRequest.getHeight());
+        addParameterIfNotNull(request, "fixed", aiObjectDetectRequest.getFixed());
+        // 图像修复 ImageRepair 特有参数
+        addParameterIfNotNull(request, "MaskPic", aiObjectDetectRequest.getMaskPic());
+        addParameterIfNotNull(request, "MaskPoly", aiObjectDetectRequest.getMaskPoly());
+        // 人脸特效 face-effect / 人脸智能美颜 face-beautify 特有参数
+        addParameterIfNotNull(request, "type", aiObjectDetectRequest.getType());
+        addParameterIfNotNull(request, "whitening", aiObjectDetectRequest.getWhitening());
+        addParameterIfNotNull(request, "smoothing", aiObjectDetectRequest.getSmoothing());
+        addParameterIfNotNull(request, "faceLifting", aiObjectDetectRequest.getFaceLifting());
+        addParameterIfNotNull(request, "eyeEnlarging", aiObjectDetectRequest.getEyeEnlarging());
+        addParameterIfNotNull(request, "gender", aiObjectDetectRequest.getGender());
+        addParameterIfNotNull(request, "age", aiObjectDetectRequest.getAge());
         return invoke(request, new Unmarshallers.AIObjectDetectUnmarshaller());
     }
 
@@ -5372,6 +5395,10 @@ public class COSClient implements COS {
         CosHttpRequest<GoodsMattingRequest> request = createRequest(customRequest.getBucketName(), "/" + customRequest.getObjectKey(), customRequest, HttpMethodName.GET);
         request.addParameter("ci-process","GoodsMatting");
         addParameterIfNotNull(request, "detect-url", customRequest.getDetectUrl());
+        addParameterIfNotNull(request, "center-layout",
+                customRequest.getCenterLayout() != null ?
+                        String.valueOf(customRequest.getCenterLayout()) : null);
+        addParameterIfNotNull(request, "padding-layout", customRequest.getPaddingLayout());
         invoke(request, new CIGetResponseHandler());
         return null;
     }
@@ -5911,7 +5938,32 @@ public class COSClient implements COS {
                 "The bucketName parameter must be specified setting the object tags");
         CosHttpRequest<DetectPetRequest> request = createRequest(detectPetRequest.getBucketName(), detectPetRequest.getObjectKey(), detectPetRequest, HttpMethodName.GET);
         request.addParameter("ci-process", "detect-pet");
+        addParameterIfNotNull(request, "detect-url", detectPetRequest.getDetectUrl());
         return invoke(request, new Unmarshallers.CICommonUnmarshaller<DetectPetResponse>(DetectPetResponse.class));
+    }
+
+    /**
+     * 大模型图片分析接口，基于大模型能力提供通用图片分析功能。
+     *
+     * <p>当前支持 ImageLabels（标签模式）：返回图片整体描述和标签信息。</p>
+     * <p>请求方式：GET ?ci-process=AIImageAnalysis</p>
+     *
+     * @param aiImageAnalysisRequest 大模型图片分析请求
+     * @return 大模型图片分析响应，包含分析结果
+     */
+    @Override
+    public AIImageAnalysisResponse aiImageAnalysis(AIImageAnalysisRequest aiImageAnalysisRequest) {
+        rejectNull(aiImageAnalysisRequest.getBucketName(),
+                "The bucketName parameter must be specified setting the object tags");
+        CosHttpRequest<AIImageAnalysisRequest> request = createRequest(
+                aiImageAnalysisRequest.getBucketName(), aiImageAnalysisRequest.getObjectKey(),
+                aiImageAnalysisRequest, HttpMethodName.GET);
+        request.addParameter("ci-process", "AIImageAnalysis");
+        addParameterIfNotNull(request, "type", aiImageAnalysisRequest.getType());
+        addParameterIfNotNull(request, "detect-url", aiImageAnalysisRequest.getDetectUrl());
+        addParameterIfNotNull(request, "label-scenes", aiImageAnalysisRequest.getLabelScenes());
+        return invoke(request, new Unmarshallers.CICommonUnmarshaller<AIImageAnalysisResponse>(
+                AIImageAnalysisResponse.class));
     }
 
     @Override
