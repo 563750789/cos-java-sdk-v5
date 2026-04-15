@@ -7,7 +7,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * <p>XML 响应根节点为 {@code <Response>}，包含 AnalysisResult 和 RequestId。</p>
  *
- * <p>响应示例：</p>
+ * <p>响应示例（ImageLabels 类型）：</p>
  * <pre>{@code
  * <Response>
  *     <AnalysisResult>
@@ -20,16 +20,25 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *                         <LabelName>Brand</LabelName>
  *                         <LabelValue>Nike</LabelValue>
  *                     </LabelInfo>
- *                     <LabelInfo>
- *                         <LabelName>Category</LabelName>
- *                         <LabelValue>上衣</LabelValue>
- *                     </LabelInfo>
  *                 </LabelInfos>
  *                 <Confidence>high</Confidence>
  *             </LabelDetail>
  *         </ImageLabelsResult>
  *     </AnalysisResult>
  *     <RequestId>NWFjMzQ0MDZfOTBmYTUwXzZkZV8z****</RequestId>
+ * </Response>
+ * }</pre>
+ *
+ * <p>响应示例（Custom 类型）：</p>
+ * <pre>{@code
+ * <Response>
+ *     <AnalysisResult>
+ *         <CustomResult>
+ *             <CustomOutput>YGBganNvbgp7Li4ufQpgYGA=</CustomOutput>
+ *         </CustomResult>
+ *         <Type>Custom</Type>
+ *     </AnalysisResult>
+ *     <RequestId>NjlkZjUwMjdfY2RiYzAwMTVfNWNmNl8x</RequestId>
  * </Response>
  * }</pre>
  */

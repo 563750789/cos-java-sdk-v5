@@ -5962,6 +5962,7 @@ public class COSClient implements COS {
         addParameterIfNotNull(request, "type", aiImageAnalysisRequest.getType());
         addParameterIfNotNull(request, "detect-url", aiImageAnalysisRequest.getDetectUrl());
         addParameterIfNotNull(request, "label-scenes", aiImageAnalysisRequest.getLabelScenes());
+        addParameterIfNotNull(request, "template-id", aiImageAnalysisRequest.getTemplateId());
         return invoke(request, new Unmarshallers.CICommonUnmarshaller<AIImageAnalysisResponse>(
                 AIImageAnalysisResponse.class));
     }

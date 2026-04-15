@@ -9,16 +9,22 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class AnalysisResult {
 
     /**
-     * 分析类型：ImageLabels
+     * 分析类型：ImageLabels / Custom
      */
     @XStreamAlias("Type")
     private String type;
 
     /**
-     * 图片标签类型的分析结果
+     * 图片标签类型的分析结果，当 Type 为 ImageLabels 时返回
      */
     @XStreamAlias("ImageLabelsResult")
     private ImageLabelsResult imageLabelsResult;
+
+    /**
+     * 自定义分析结果，当 Type 为 Custom 时返回
+     */
+    @XStreamAlias("CustomResult")
+    private CustomResult customResult;
 
     public String getType() {
         return type;
@@ -36,11 +42,20 @@ public class AnalysisResult {
         this.imageLabelsResult = imageLabelsResult;
     }
 
+    public CustomResult getCustomResult() {
+        return customResult;
+    }
+
+    public void setCustomResult(CustomResult customResult) {
+        this.customResult = customResult;
+    }
+
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("AnalysisResult{");
         sb.append("type='").append(type).append('\'');
         sb.append(", imageLabelsResult=").append(imageLabelsResult);
+        sb.append(", customResult=").append(customResult);
         sb.append('}');
         return sb.toString();
     }

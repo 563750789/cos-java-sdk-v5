@@ -81,4 +81,34 @@ public class AIImageAnalysisDemo {
         AIImageAnalysisResponse response = client.aiImageAnalysis(request);
         System.out.println(Jackson.toJsonString(response));
     }
+
+    /**
+     * aiImageAnalysisCustomWithUrl 自定义场景分析
+     * 使用 Custom 类型进行自定义场景的图片分析，返回 Base64 编码的自定义输出内容。
+     *
+     * 注意：使用 detectUrl 方式时，不传 objectKey，需要在创建 COSClient 时关闭路径校验，否则会抛出 IllegalArgumentException：
+     *   ClientConfig clientConfig = new ClientConfig(region);
+     *   clientConfig.setCheckRequestPath(false);
+     *   COSClient client = new COSClient(cred, clientConfig);
+     */
+    public static void aiImageAnalysisCustomWithUrl(COSClient client) {
+        //1.创建任务请求对象
+        AIImageAnalysisRequest request = new AIImageAnalysisRequest();
+        //2.添加请求参数 参数详情请见api接口文档
+        //2.1设置请求bucket
+        request.setBucketName("demo-1234567890");
+        //2.2设置bucket中的图片位置
+        request.setDetectUrl("https://demo-1234567890.cos.ap-chongqing.myqcloud.com/sample.jpg");
+        //2.3设置分析类型为 Custom（自定义场景）
+        request.setType("Custom");
+        request.setTemplateId("template-id");
+        //3.调用接口,获取任务响应对象
+        AIImageAnalysisResponse response = client.aiImageAnalysis(request);
+        //4.打印结果
+        if (response.getAnalysisResult() != null
+                && response.getAnalysisResult().getCustomResult() != null) {
+            System.out.println(response.getAnalysisResult().getCustomResult().getCustomOutput());
+        }
+        System.out.println(Jackson.toJsonString(response));
+    }
 }
