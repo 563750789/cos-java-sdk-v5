@@ -28,10 +28,10 @@ public class DocJobDemo {
         //1.创建任务请求对象
         DocJobRequest request = new DocJobRequest();
         //2.添加请求参数 参数详情请见api接口文档
-        request.setBucketName("markjrzhang-1251704708");
+        request.setBucketName("examplebucket-1250000000");
         DocJobObject docJobObject = request.getDocJobObject();
         docJobObject.setTag("DocProcess");
-        docJobObject.getInput().setObject("1111.docx");
+        docJobObject.getInput().setObject("1.docx");
         DocProcessObject docProcessObject = docJobObject.getOperation().getDocProcessObject();
         docProcessObject.setQuality("100");
         docProcessObject.setZoom("100");
@@ -41,14 +41,14 @@ public class DocJobDemo {
         docProcessObject.setDocPassword("123");
 //        DocWatermark docWatermark = docProcessObject.getDocWatermark();
 //        docWatermark.setType("1");
-//        docWatermark.setImage("https://markjrzhang-1251704708.cos.ap-chongqing.myqcloud.com/case/xhs.png");
+//        docWatermark.setImage("https://examplebucket-1250000000.cos.ap-chongqing.myqcloud.com/case/xhs.png");
 //        docWatermark.setDx("10");
 //        docWatermark.setDy("10");
 
         MediaOutputObject output = docJobObject.getOperation().getOutput();
-        output.setRegion("ap-chongqing");
-        output.setBucket("markjrzhang-1251704708");
-        output.setObject("mark/test-${Page}.pdf");
+        output.setRegion("ap-singapore");
+        output.setBucket("examplebucket-1250000000");
+        output.setObject("result/test-${Page}.pdf");
 
         docJobObject.getOperation().setUserData("user-data");
         docJobObject.setCallBackFormat("json");
@@ -68,7 +68,7 @@ public class DocJobDemo {
         docJobObject.getInput().setObject("1.docx");
         DocWatermark docWatermark = docJobObject.getOperation().getDocWatermarkObject();
         docWatermark.setType("1");
-        docWatermark.setImage("https://markjrzhang-1251704708.cos.ap-chongqing.myqcloud.com/case/xhs.png");
+        docWatermark.setImage("https://examplebucket-1250000000.cos.ap-chongqing.myqcloud.com/case/xhs.png");
         docWatermark.setDx("10");
         docWatermark.setDy("10");
 
@@ -107,8 +107,8 @@ public class DocJobDemo {
         docProcessObject.setDocPassword("123");
         MediaOutputObject output = docJobObject.getOperation().getOutput();
         output.setRegion("ap-chongqing");
-        output.setBucket("markjrzhang-1251704708");
-        output.setObject("mark/pic-${Page}.jpg");
+        output.setBucket("examplebucket-1250000000");
+        output.setObject("result/pic-${Page}.jpg");
 
         docJobObject.getOperation().setUserData("user-data");
         docJobObject.setCallBackFormat("json");
@@ -132,8 +132,8 @@ public class DocJobDemo {
         //1.创建任务请求对象
         DocJobRequest request = new DocJobRequest();
         //2.添加请求参数 参数详情请见api接口文档
-        request.setBucketName("markjrzhang-1251704708");
-        request.setJobId("d67b5c8fc6de911f1b27393a893265e8e");
+        request.setBucketName("demo-1234567890");
+        request.setJobId("d16a7e4f284ad11f0a3499b983ea*****");
         //3.调用接口,获取任务响应对象
         DocJobResponse docJobResponse = client.describeDocProcessJob(request);
         System.out.println(docJobResponse);

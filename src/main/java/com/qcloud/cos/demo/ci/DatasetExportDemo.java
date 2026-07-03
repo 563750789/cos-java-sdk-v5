@@ -57,7 +57,7 @@ public class DatasetExportDemo {
      */
     public static CreateDatasetExportJobResponse createExportJobDataExport(COSClient client) {
         CreateDatasetExportJobRequest request = new CreateDatasetExportJobRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         // 任务名称，用户自定义
         request.setName("export-task-2026-05-22");
         // 数据集名称
@@ -68,7 +68,7 @@ public class DatasetExportDemo {
         // 输出目标：必填（ExportJobType=1 时）
         DatasetExportOutput output = new DatasetExportOutput();
         output.setRegion("ap-guangzhou");
-        output.setBucket("examplebucket-1251704708");
+        output.setBucket("examplebucket-1250000000");
         output.setObject("export/result_20260522.json");
         request.setOutput(output);
 
@@ -83,7 +83,7 @@ public class DatasetExportDemo {
      */
     public static CreateDatasetExportJobResponse createExportJobGfsPreheat(COSClient client) {
         CreateDatasetExportJobRequest request = new CreateDatasetExportJobRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         request.setName("gfs-preheat-2026-05-22");
         request.setDatasetName("test");
         // 任务类型：2=GFS 数据预热
@@ -106,7 +106,7 @@ public class DatasetExportDemo {
      */
     public static DescribeDatasetExportJobResponse describeExportJob(COSClient client, String jobId) {
         DescribeDatasetExportJobRequest request = new DescribeDatasetExportJobRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         request.setDatasetname("test");
         request.setJobid(jobId);
 
@@ -120,7 +120,7 @@ public class DatasetExportDemo {
      */
     public static void describeExportJobs(COSClient client) {
         DescribeDatasetExportJobsRequest request = new DescribeDatasetExportJobsRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         request.setDatasetname("test");
         // 单页大小，默认 100，最大 200
         request.setMaxresults(100);
@@ -138,7 +138,7 @@ public class DatasetExportDemo {
      */
     public static void cancelExportJob(COSClient client, String jobId) {
         CancelDatasetExportJobRequest request = new CancelDatasetExportJobRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         request.setDatasetName("test");
         request.setJobId(jobId);
 

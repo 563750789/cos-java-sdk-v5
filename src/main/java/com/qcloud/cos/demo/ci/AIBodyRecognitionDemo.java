@@ -39,7 +39,7 @@ public class AIBodyRecognitionDemo {
      */
     public static void aiBodyRecognitionWithObjectKey(COSClient client) {
         //图片所在bucket名称
-        String bucketName = "demo-1251704708";
+        String bucketName = "examplebucket-1250000000";
         //图片在bucket中的相对位置，比如根目录下file文件夹中的demo.png路径为file/demo.png
         String key = "2.png";
         GetObjectRequest getObj = new GetObjectRequest(bucketName, key);

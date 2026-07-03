@@ -48,7 +48,7 @@ public class AIImageAnalysisJobDemo {
 
         part = new AIImageAnalysisJobPart();
         part.setType("Image");
-        part.setUrl("https://markjrzhang-1251704708.cos.ap-chongqing.myqcloud.com/case/ImageAnalysis/1.jpg");
+        part.setUrl("https://examplebucket-1250000000.cos.ap-chongqing.myqcloud.com/case/ImageAnalysis/1.jpg");
         part.setText(prompt);
         parts.add(part);
 
@@ -73,7 +73,7 @@ public class AIImageAnalysisJobDemo {
         // 1.创建请求对象
         AIImageAnalysisJobRequest request = new AIImageAnalysisJobRequest();
         // 2.设置请求 bucket
-        request.setBucketName("markjrzhang-1251704708");
+        request.setBucketName("examplebucket-1250000000");
         // 3.构造 Input.Message.Content：追加多张图片 Part（通过 ObjectKey）
         AIImageAnalysisJobContent content = request.getInput().getMessage().getContent();
         content.addImagePartByObjectKey("products/shoe_front.jpg")
@@ -95,7 +95,7 @@ public class AIImageAnalysisJobDemo {
      */
     public static void createAIImageAnalysisJobGeneralMixed(COSClient client) {
         AIImageAnalysisJobRequest request = new AIImageAnalysisJobRequest();
-        request.setBucketName("markjrzhang-1251704708");
+        request.setBucketName("examplebucket-1250000000");
         // ObjectKey + Url 混合
         request.getInput().getMessage().getContent()
                 .addImagePartByObjectKey("sample/image1.jpg")
@@ -115,7 +115,7 @@ public class AIImageAnalysisJobDemo {
      */
     public static void createAIImageAnalysisJobCustomWithPrompt(COSClient client) {
         AIImageAnalysisJobRequest request = new AIImageAnalysisJobRequest();
-        request.setBucketName("markjrzhang-1251704708");
+        request.setBucketName("examplebucket-1250000000");
         // 多张图片 + 文本 Part（顺序即为大模型输入顺序）
         request.getInput().getMessage().getContent()
                 .addImagePartByUrl("https://example.com/demo_img_1.png")

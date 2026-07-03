@@ -35,7 +35,7 @@ public class HybridSearchDemo {
      */
     public static void hybridSearchPicMode(COSClient client) {
         DatasetHybridSearchRequest request = new DatasetHybridSearchRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         // 设置数据集名称，同一个账户下唯一。;是否必传：是
         request.setDatasetName("test");
         // 设置检索模板：ImageSearch 表示返回图像级结果。;是否必传：是
@@ -59,7 +59,7 @@ public class HybridSearchDemo {
      */
     public static void hybridSearchTextMode(COSClient client) {
         DatasetHybridSearchRequest request = new DatasetHybridSearchRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         request.setDatasetName("test");
         // DocSearch 模板用于返回文档级结果（DocResult[]）
         request.setTemplates("DocSearch");
@@ -80,7 +80,7 @@ public class HybridSearchDemo {
      */
     public static void hybridSearchWithFilter(COSClient client) {
         DatasetHybridSearchRequest request = new DatasetHybridSearchRequest();
-        request.setAppId("1251704708");
+        request.setAppId("1250000000");
         request.setDatasetName("test");
         request.setTemplates("DocSearch");
         request.setMode("text");
