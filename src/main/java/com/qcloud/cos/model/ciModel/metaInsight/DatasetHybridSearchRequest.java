@@ -6,7 +6,7 @@ import com.qcloud.cos.internal.CIServiceRequest;
 import java.util.List;
 
 /**
- * 多模态混合检索请求（V2.7.0 新增）。
+ * 多模态混合检索请求
  * <p>
  * 对应 MetaInsight 接口：POST /datasetquery/hybridsearch。
  * 支持图片（pic）/ 文本（text）双模式检索，

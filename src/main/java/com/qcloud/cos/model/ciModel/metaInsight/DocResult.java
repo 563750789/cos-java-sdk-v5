@@ -5,13 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 /**
- * 文档检索结果项（V2.7.0 新增）。
- * <p>
- * {@link DatasetHybridSearchResponse#getDocResult()} 列表的元素类型。
- * 当混合检索请求 {@code Templates=DocSearch} 时，后端返回该结构表示一篇命中文档。
- * </p>
- *
- * @since 5.6.271 (MetaInsight V2.7.0)
+ * 文档检索结果项
  */
 public class DocResult {
 

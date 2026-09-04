@@ -16,7 +16,7 @@ import java.util.List;
  * </ul>
  *
  * @since 5.6.271 (MetaInsight V2.7.0)
- * @see <a href="https://write.woa.com/document/200892020456558592">官方文档</a>
+ * @see <a href="https://cloud.tencent.com/document/product/460/135101">混合检索-视频检索</a>
  */
 public class DatasetHybridSearchResponse extends CiServiceResult {
 
@@ -36,6 +36,11 @@ public class DatasetHybridSearchResponse extends CiServiceResult {
      */
     private List<DocResult> docResult;
 
+    /**
+     * 视频检索结果列表（{@code Templates=VideoSearch} 时返回）。
+     */
+    private List<VideoResult> videoResult;
+
     public String getRequestId() { return requestId; }
 
     public void setRequestId(String requestId) { this.requestId = requestId; }
@@ -47,5 +52,9 @@ public class DatasetHybridSearchResponse extends CiServiceResult {
     public List<DocResult> getDocResult() { return docResult; }
 
     public void setDocResult(List<DocResult> docResult) { this.docResult = docResult; }
+
+    public List<VideoResult> getVideoResult() { return videoResult; }
+
+    public void setVideoResult(List<VideoResult> videoResult) { this.videoResult = videoResult; }
 
 }
