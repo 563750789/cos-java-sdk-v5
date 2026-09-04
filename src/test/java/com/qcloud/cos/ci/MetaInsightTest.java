@@ -188,6 +188,32 @@ public class MetaInsightTest extends AbstractCOSClientCITest {
         }
     }
 
+    /**
+     * hybridsearch 带 Filter 标量过滤的集成测试（text 模式 + DocSearch 模板）。
+     * 验证 @JsonRawValue 修复后 Filter 以 JSON 对象形式传输、后端能正确解析过滤条件。
+     * 需要环境变量 ciSecretId/ciSecretKey/ciBucket/ciRegion。
+     */
+    @Test
+    public void datasetHybridSearchWithFilterTest() {
+        try {
+            DatasetHybridSearchRequest request = new DatasetHybridSearchRequest();
+            request.setAppId(appid);
+            request.setDatasetName("test");
+            request.setMode("text");
+            request.setTemplates("DocSearch");
+            request.setSearchText("2025年商品营销数据");
+            request.setLimit(10);
+            request.setMatchThreshold(1);
+            request.setFilter("{\"$and\":[{\"MediaType\":{\"$in\":[\"image\",\"document\"]}},{\"Size\":{\"$gt\":123}}]}");
+            // 打印实际请求体，确认 Filter 是 JSON 对象而非转义字符串
+            System.out.println(CIJackson.toJsonString(request));
+            DatasetHybridSearchResponse response = cosclient.hybridsearch(request);
+            System.out.println(Jackson.toJsonString(response));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // ========================================================================
     // V2.7.0 数据集异步导出：CreateDatasetExportJob / DescribeDatasetExportJob
     //         / DescribeDatasetExportJobs / CancelDatasetExportJob

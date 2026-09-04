@@ -1,6 +1,7 @@
 package com.qcloud.cos.model.ciModel.metaInsight;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.qcloud.cos.internal.CIServiceRequest;
 
 import java.util.List;
@@ -77,9 +78,12 @@ public class DatasetHybridSearchRequest extends CIServiceRequest {
     /**
      * 过滤表达式，嵌套 JSON 字符串字面量直传到后端，例如：
      * <pre>{@code {"$and":[{"ContentType":{"$eq":"application/pdf"}},{"Size":{"$gt":1024}}]}}</pre>
-     * SDK 不解析此字段，由用户自行构造合法的 JSON。
+     * 文档定义为 Container（JSON 对象），此处通过 {@link JsonRawValue} 将字符串按原始 JSON
+     * 序列化为对象，避免被转义成字符串字面量。SDK 不解析此字段，调用方需自行保证 JSON 合法。
+     * 支持的标量字段与操作符见官方文档《标量过滤字段与操作符支持列表》。
      * 是否必传：否
      */
+    @JsonRawValue
     private String filter;
 
     public String getDatasetName() { return datasetName; }

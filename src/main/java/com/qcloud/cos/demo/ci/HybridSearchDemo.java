@@ -86,8 +86,6 @@ public class HybridSearchDemo {
         request.setMode("text");
         request.setSearchText("年度财务报告");
         request.setLimit(10);
-        // Filter 是 JSON 字符串字面量，由 SDK 直接透传到后端，不做解析与校验。
-        // 示例：仅返回 ContentType=application/pdf 且 Size>1024 字节的命中文档。
         request.setFilter("{\"$and\":[{\"ContentType\":{\"$eq\":\"application/pdf\"}},{\"Size\":{\"$gt\":1024}}]}");
 
         DatasetHybridSearchResponse response = client.hybridsearch(request);
