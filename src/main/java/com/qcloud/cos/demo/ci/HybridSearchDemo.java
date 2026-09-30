@@ -8,14 +8,13 @@ import com.qcloud.cos.utils.Jackson;
 import java.util.Arrays;
 
 /**
- * 多模态混合检索 Demo（V2.7.0 新增）。
+ * 多模态混合检索 Demo。
  * <p>详情见 <a href="https://cloud.tencent.com/document/product/460/135101">官方文档</a>。</p>
  *
- * <p>本 Demo 演示 4 种典型场景：</p>
+ * <p>本 Demo 演示 3 种典型场景：</p>
  * <ol>
  *   <li>{@link #hybridSearchPicMode(COSClient)}：以图搜图，{@code Templates=ImageSearch} + {@code Mode=pic}</li>
  *   <li>{@link #hybridSearchTextMode(COSClient)}：文本搜文档，{@code Templates=DocSearch} + {@code Mode=text}</li>
- *   <li>{@link #hybridSearchVideoMode(COSClient)}：文本搜视频片段，{@code Templates=VideoSearch} + {@code Mode=text}</li>
  *   <li>{@link #hybridSearchWithFilter(COSClient)}：带 Filter 表达式的精细化检索</li>
  * </ol>
  */
@@ -27,7 +26,6 @@ public class HybridSearchDemo {
         // 2 调用要使用的方法（默认演示 pic 模式，可切换为下方注释中的其他场景）。
         hybridSearchPicMode(client);
         // hybridSearchTextMode(client);
-        // hybridSearchVideoMode(client);
         // hybridSearchWithFilter(client);
     }
 
@@ -77,29 +75,7 @@ public class HybridSearchDemo {
     }
 
     /**
-     * 场景三：以文搜视频片段（Templates=VideoSearch + Mode=text）。
-     * <p>使用一段文本检索数据集中相关的视频片段，返回 VideoResult 列表。
-     * 自 V2.8.2 起，返回的视频片段携带 {@code Description} 字段，为片段内容的大模型描述。</p>
-     */
-    public static void hybridSearchVideoMode(COSClient client) {
-        DatasetHybridSearchRequest request = new DatasetHybridSearchRequest();
-        request.setAppId("1250000000");
-        request.setDatasetName("test");
-        // VideoSearch 模板用于返回视频片段级结果（VideoResult[]）
-        request.setTemplates("VideoSearch");
-        // 文本模式
-        request.setMode("text");
-        // 检索文本，长度 ≤ 60 UTF-8 字符
-        request.setSearchText("熊猫在草地上玩耍的片段");
-        request.setLimit(10);
-        request.setMatchThreshold(70);
-
-        DatasetHybridSearchResponse response = client.hybridsearch(request);
-        System.out.println(Jackson.toJsonString(response));
-    }
-
-    /**
-     * 场景四：带 Filter 表达式的精细化检索。
+     * 场景三：带 Filter 表达式的精细化检索。
      * <p>通过 Filter 嵌套 JSON 表达式，对元数据字段进行二次过滤，例如限定文件类型为 PDF 且大小 &gt; 1KB。</p>
      */
     public static void hybridSearchWithFilter(COSClient client) {
