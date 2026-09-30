@@ -514,6 +514,88 @@ public class GetAIMediaInfoTest {
         strictMapper.readValue(CASE_IMAGE, GetAIMediaInfoResponse.class);
     }
 
+    /**
+     * 线上真实响应回归：53 秒新闻视频（刘小涛任江苏省长报道）的完整 GetAIMediaInfo 返回。
+     * 资源文件 cases/getaimediainfo-online.json 由线上日志原文清洗而来（OcrInfo 尾部被日志截断，
+     * 已按括号平衡补全闭合；AiLabelInfo/AsrInfo/FaceInfo/AiRoughData 均为完整数据）。
+     */
+    @Test
+    public void onlineResponseParseTest() throws Exception {
+        GetAIMediaInfoResponse response = unmarshall(readResource("/cases/getaimediainfo-online.json"));
+
+        GetAIMediaInfoResponse.MediaInfo mediaInfo = response.getMediaInfo();
+        assertNotNull(mediaInfo);
+        assertNotNull(mediaInfo.getCosTagging());
+        assertNotNull(mediaInfo.getCosUserMeta());
+        assertNotNull(mediaInfo.getCustomLabels());
+
+        GetAIMediaInfoResponse.AiData aiData = mediaInfo.getFileInfo().getAiData();
+        assertNotNull(aiData);
+
+        // AI 标签：11 个时间段，首个片段 0-5s，首条标签为 新闻/政务新闻/人事任免
+        assertEquals(11, aiData.getAiLabelInfo().size());
+        GetAIMediaInfoResponse.AiLabelInfo firstLabel = aiData.getAiLabelInfo().get(0);
+        assertEquals(0.0, firstLabel.getFrom(), 0.0001);
+        assertEquals(5.0, firstLabel.getTo(), 0.0001);
+        assertEquals(8, firstLabel.getLabelDetail().size());
+        assertEquals("high", firstLabel.getLabelDetail().get(0).getConfidence());
+        assertEquals("新闻", firstLabel.getLabelDetail().get(0).getLabelInfos().get("first_label"));
+        assertEquals("政务新闻", firstLabel.getLabelDetail().get(0).getLabelInfos().get("second_label"));
+        assertEquals("人事任免", firstLabel.getLabelDetail().get(0).getLabelInfos().get("third_label"));
+
+        // AI 粗分类与整体描述
+        assertNotNull(aiData.getAiRoughData());
+        assertEquals("资讯/社会/财经/科技", aiData.getAiRoughData().getAiCategory());
+        assertNotNull(aiData.getAiRoughData().getDescription());
+
+        // 语音识别：1 段，覆盖 0.02-48.24s
+        assertEquals(1, aiData.getAsrInfo().size());
+        GetAIMediaInfoResponse.AsrInfo asrInfo = aiData.getAsrInfo().get(0);
+        assertEquals("0", asrInfo.getClipId());
+        assertEquals(0.02, asrInfo.getFrom(), 0.000001);
+        assertEquals(48.24, asrInfo.getTo(), 0.0001);
+        assertNotNull(asrInfo.getContent());
+
+        // 人脸：1 个人物（刘小涛，politician），2 个出现时间段
+        assertEquals(1, aiData.getFaceInfo().size());
+        GetAIMediaInfoResponse.FaceInfo faceInfo = aiData.getFaceInfo().get(0);
+        assertEquals("0021572", faceInfo.getFaceId());
+        assertEquals("politician", faceInfo.getCategory());
+        assertEquals("刘小涛", faceInfo.getLabelName());
+        assertEquals(95.0, faceInfo.getScore(), 0.0001);
+        assertEquals(2, faceInfo.getOccurrencesInfos().size());
+        assertEquals(11.0, faceInfo.getOccurrencesInfos().get(0).getFrom(), 0.0001);
+        assertEquals(15.0, faceInfo.getOccurrencesInfos().get(0).getTo(), 0.0001);
+        assertEquals(5, faceInfo.getOccurrencesInfos().get(0).getTrackData().size());
+        assertNotNull(faceInfo.getTrackData());
+
+        // 文字识别：212 条
+        assertEquals(212, aiData.getOcrInfo().size());
+        GetAIMediaInfoResponse.OcrInfo firstOcr = aiData.getOcrInfo().get(0);
+        assertEquals("刘小涛当选省人民政府省长", firstOcr.getContent());
+        assertEquals(100.0, firstOcr.getScore(), 0.0001);
+        assertEquals(Integer.valueOf(156), firstOcr.getBoxPosition().getLeft());
+        assertEquals(Integer.valueOf(166), firstOcr.getBoxPosition().getTop());
+        assertEquals(Integer.valueOf(364), firstOcr.getBoxPosition().getWidth());
+        assertEquals(Integer.valueOf(30), firstOcr.getBoxPosition().getHeight());
+    }
+
+    @Test
+    public void onlineResponseFullCoverageTest() throws Exception {
+        // 严格模式反序列化线上真实响应：任何未封装字段都会抛 UnrecognizedPropertyException
+        ObjectMapper strictMapper = new ObjectMapper();
+        strictMapper.setPropertyNamingStrategy(PropertyNamingStrategies.UPPER_CAMEL_CASE);
+        strictMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        strictMapper.readValue(readResource("/cases/getaimediainfo-online.json"), GetAIMediaInfoResponse.class);
+    }
+
+    private static String readResource(String path) throws Exception {
+        java.io.InputStream in = GetAIMediaInfoTest.class.getResourceAsStream(path);
+        assertNotNull("测试资源不存在: " + path, in);
+        java.util.Scanner scanner = new java.util.Scanner(in, "UTF-8").useDelimiter("\\A");
+        return scanner.hasNext() ? scanner.next() : "";
+    }
+
     @Test
     public void requestSerializeTest() throws Exception {
         // 文档案例一请求体示例，序列化结果须与其逐字段全等（不多不少）

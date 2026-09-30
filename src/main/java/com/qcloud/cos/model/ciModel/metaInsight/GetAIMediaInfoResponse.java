@@ -438,6 +438,11 @@ public class GetAIMediaInfoResponse extends CiServiceResult {
 
     public static class FaceInfo {
         /**
+         *人脸 ID，与人脸库中的 FaceId 一致，可作为人脸定位媒资片段等接口的入参。
+         */
+        private String faceId;
+
+        /**
          *人脸匹配得分，范围为 [0, 100]。
          */
         private Double score;
@@ -461,6 +466,10 @@ public class GetAIMediaInfoResponse extends CiServiceResult {
          *人脸单帧详细信息列表。适用范围：仅图片。
          */
         private List<TrackData> trackData;
+
+        public String getFaceId() { return faceId; }
+
+        public void setFaceId(String faceId) { this.faceId = faceId; }
 
         public Double getScore() { return score; }
 
